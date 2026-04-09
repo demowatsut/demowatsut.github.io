@@ -20,6 +20,7 @@
             --input-bg: #1a1c1e;
             --border: rgba(255, 255, 255, 0.05);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --fb-color: #1877f2; /* สี Facebook หลัก */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -27,10 +28,14 @@
         body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; line-height: 1.6; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- Notification --- */
+        /* --- Notification & Custom Modal --- */
         #notification-container { position: fixed; bottom: 30px; left: 30px; z-index: 10000; }
         .notify { background: #202124; border-radius: 4px; padding: 12px 24px; color: #fff; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; margin-top: 10px; animation: slideUp 0.3s ease-out; min-width: 250px; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 7000; backdrop-filter: blur(8px); animation: fadeIn 0.3s ease; }
+        .custom-modal { background: #1a1c1e; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid var(--border); text-align: center; }
 
         /* --- Navigation --- */
         .top-nav { position: fixed; top: 0; width: 100%; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(10,10,10,0.7); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
@@ -42,25 +47,35 @@
         .hero img { max-width: 140px; margin-bottom: 25px; filter: drop-shadow(0 0 20px var(--accent)); transition: var(--transition); }
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(28px, 6vw, 60px); letter-spacing: 12px; margin-bottom: 10px; color: var(--accent); }
 
-        /* --- Member Grid & Role Badges --- */
+        /* --- Member Grid --- */
         .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
-        .member-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; transition: var(--transition); }
+        .member-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; transition: var(--transition); position: relative; }
         .member-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .avatar { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
         .role-badge { font-family: 'Orbitron'; font-size: 9px; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- Login Modal --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 5000; backdrop-filter: blur(8px); }
-        .login-card { background: #1a1c1e; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; animation: slideUp 0.4s ease; }
-        .login-card input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 15px; outline: none; }
-        
+        /* --- Facebook Icon Specific Style --- */
+        .fb-link { 
+            color: var(--fb-color); 
+            font-size: 20px; 
+            margin-left: auto; 
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .fb-link:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+
         /* --- Admin Panel --- */
         .admin-panel { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 6000; overflow-y: auto; padding: 40px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; max-width: 1400px; margin: 0 auto; }
         .admin-card { background: #141414; padding: 25px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px;}
-        input, select { width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-bottom: 12px; font-family: 'Inter'; }
+        input, select { width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-bottom: 12px; font-family: 'Inter'; outline: none; }
+        input:focus { border-color: var(--accent); }
         label { display: block; font-size: 10px; color: var(--accent); margin-bottom: 5px; font-family: 'Orbitron'; }
-        .btn-save { width: 100%; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; margin-bottom: 10px; }
+        .btn-save { width: 100%; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; margin-bottom: 10px; transition: 0.3s; }
+        .btn-save:active { transform: scale(0.95); }
 
         .music-ctrl { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--accent); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; transition: var(--transition); }
     </style>
@@ -69,13 +84,42 @@
 
     <div id="notification-container"></div>
 
+    <div id="customAlert" class="modal-overlay">
+        <div class="custom-modal">
+            <i id="alertIcon" class="fa-solid fa-circle-exclamation" style="font-size: 40px; color: var(--accent); margin-bottom: 20px;"></i>
+            <h3 id="alertTitle" style="font-family: 'Orbitron'; margin-bottom: 10px;">MESSAGE</h3>
+            <p id="alertMsg" style="font-size: 14px; opacity: 0.8; margin-bottom: 25px;">Details here...</p>
+            <div id="alertButtons" style="display: flex; gap: 10px;">
+                <button id="alertConfirmBtn" class="config-btn" style="flex: 1; padding: 12px;">OK</button>
+                <button id="alertCancelBtn" class="config-btn" style="flex: 1; padding: 12px; background: #333; color: #fff; display: none;">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
     <div id="loginModal" class="modal-overlay">
-        <div class="login-card">
-            <h2 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px;">ADMIN LOGIN</h2>
-            <input type="text" id="loginUser" placeholder="Username">
-            <input type="password" id="loginPass" placeholder="Password">
-            <button class="config-btn" style="width:100%; padding:12px;" onclick="attemptLogin()">ENTER SYSTEM</button>
-            <p onclick="closeLoginModal()" style="font-size:12px; margin-top:15px; cursor:pointer; opacity:0.5;">CANCEL</p>
+        <div class="custom-modal" style="text-align: left;">
+            <h2 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px; text-align: center;">ADMIN LOGIN</h2>
+            <label>USERNAME</label>
+            <input type="text" id="loginUser">
+            <label>PASSWORD</label>
+            <input type="password" id="loginPass">
+            <button class="config-btn" style="width:100%; padding:12px; margin-top: 10px;" onclick="attemptLogin()">ENTER SYSTEM</button>
+            <p onclick="closeModal('loginModal')" style="font-size:12px; margin-top:15px; cursor:pointer; opacity:0.5; text-align: center;">CANCEL</p>
+        </div>
+    </div>
+
+    <div id="editMemberModal" class="modal-overlay">
+        <div class="custom-modal" style="text-align: left; max-width: 500px;">
+            <h3 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px;">EDIT MEMBER</h3>
+            <input type="hidden" id="editMemId">
+            <label>NAME</label><input type="text" id="editMemName">
+            <label>IMAGE URL</label><input type="text" id="editMemImg">
+            <label>FB URL</label><input type="text" id="editMemFB">
+            <label>ROLE</label><select id="editMemRole"></select>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="config-btn" style="flex: 2;" onclick="updateMember()">SAVE CHANGES</button>
+                <button class="config-btn" style="flex: 1; background:#333; color:#fff;" onclick="closeModal('editMemberModal')">CANCEL</button>
+            </div>
         </div>
     </div>
 
@@ -83,7 +127,7 @@
         <div style="font-family: 'Orbitron'; font-size: 10px; letter-spacing: 2px;">
             MEMBERS: <span id="countNum" style="color:var(--accent)">0</span>
         </div>
-        <button class="config-btn" onclick="showLoginModal()"><i class="fa-solid fa-shield-halved"></i> ACCESS PANEL</button>
+        <button class="config-btn" onclick="openModal('loginModal')"><i class="fa-solid fa-shield-halved"></i> ACCESS PANEL</button>
     </nav>
 
     <header class="hero">
@@ -108,25 +152,25 @@
         <div class="admin-grid">
             <div class="admin-card">
                 <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-gears"></i> SITE CONFIG</h3>
-                <label>SITE NAME</label><input type="text" id="editSiteName">
-                <label>DESCRIPTION</label><input type="text" id="editSiteDesc">
-                <label>THEME COLOR</label><input type="color" id="editThemeColor" style="height:40px;">
-                <label>LOGO URL</label><input type="text" id="editLogoUrl">
+                <label>SITE NAME</label><input type="text" id="configSiteName">
+                <label>DESCRIPTION</label><input type="text" id="configSiteDesc">
+                <label>THEME COLOR</label><input type="color" id="configThemeColor" style="height:40px;">
+                <label>LOGO URL</label><input type="text" id="configLogoUrl">
                 <button class="btn-save" style="background:var(--accent);" onclick="saveConfig()">UPDATE SITE</button>
             </div>
 
             <div class="admin-card">
                 <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-tags"></i> ROLE MANAGER</h3>
                 <div style="background:#000; padding:15px; border-radius:8px; margin-bottom:15px;">
-                    <label>NEW ROLE NAME</label><input type="text" id="newRoleName" placeholder="Admin, VIP, etc.">
+                    <label>ROLE NAME</label><input type="text" id="newRoleName" placeholder="Admin, VIP, etc.">
                     <label>ROLE COLOR</label><input type="color" id="newRoleColor" value="#ffc107" style="height:40px;">
                     <button class="btn-save" style="background:#fff; color:#000;" onclick="addRole()">CREATE ROLE</button>
                 </div>
-                <div id="roleListContainer" style="max-height:150px; overflow-y:auto;"></div>
+                <div id="roleListContainer" style="max-height:180px; overflow-y:auto;"></div>
             </div>
 
             <div class="admin-card">
-                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-user-plus"></i> MEMBERS</h3>
+                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-user-plus"></i> ADD NEW MEMBER</h3>
                 <div style="background:#000; padding:15px; border-radius:8px;">
                     <label>NAME</label><input type="text" id="newMemName">
                     <label>IMAGE URL</label><input type="text" id="newMemImg">
@@ -139,8 +183,8 @@
         </div>
 
         <div class="admin-card" style="max-width:1400px; margin: 0 auto;">
-            <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px;">MANAGE EXISTING MEMBERS</h3>
-            <div id="adminMemberList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:10px;"></div>
+            <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);">MANAGE MEMBERS</h3>
+            <div id="adminMemberList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:15px;"></div>
         </div>
     </div>
 
@@ -154,6 +198,21 @@
         let allRoles = {};
         let siteConfig = {};
 
+        // --- Custom Dialog System ---
+        function customAlert(title, msg, onConfirm = null, showCancel = false) {
+            const modal = document.getElementById('customAlert');
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMsg').innerText = msg;
+            const confirmBtn = document.getElementById('alertConfirmBtn');
+            const cancelBtn = document.getElementById('alertCancelBtn');
+
+            modal.style.display = 'flex';
+            cancelBtn.style.display = showCancel ? 'block' : 'none';
+
+            confirmBtn.onclick = () => { modal.style.display = 'none'; if(onConfirm) onConfirm(); };
+            cancelBtn.onclick = () => { modal.style.display = 'none'; };
+        }
+
         function showNotify(msg) {
             const container = document.getElementById('notification-container');
             const toast = document.createElement('div');
@@ -163,15 +222,18 @@
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
-        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
         function attemptLogin() {
             if(document.getElementById('loginUser').value === 'ghett' && document.getElementById('loginPass').value === 'ghett9871') {
                 showNotify("WELCOME ADMIN");
-                closeLoginModal();
+                closeModal('loginModal');
                 document.getElementById('adminPanel').style.display = 'block';
                 loadAdminData();
-            } else { alert("WRONG PASSWORD"); }
+            } else {
+                customAlert("ERROR", "WRONG USERNAME OR PASSWORD");
+            }
         }
         function logoutAdmin() { location.reload(); }
 
@@ -187,8 +249,8 @@
         db.ref('roles').on('value', snap => {
             allRoles = snap.val() || {};
             renderRoles();
-            updateRoleDropdown();
-            renderMembers(); // Re-render members to update role colors
+            updateRoleDropdowns();
+            renderMembers();
         });
 
         db.ref('members').on('value', snap => {
@@ -220,25 +282,35 @@
         function renderRoles() {
             const container = document.getElementById('roleListContainer');
             container.innerHTML = Object.keys(allRoles).map(id => `
-                <div style="display:flex; justify-content:space-between; background:#1a1a1a; padding:8px; margin-bottom:5px; border-radius:5px; font-size:12px;">
-                    <span style="color:${allRoles[id].color}"><i class="fa-solid fa-circle"></i> ${allRoles[id].name}</span>
-                    <i class="fa-solid fa-trash" style="color:#ff4444; cursor:pointer;" onclick="deleteRole('${id}')"></i>
+                <div style="display:flex; justify-content:space-between; background:#1a1a1a; padding:10px; margin-bottom:5px; border-radius:8px; align-items:center;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="color" value="${allRoles[id].color}" onchange="updateRoleColor('${id}', this.value)" style="width:25px; height:25px; padding:0; border:none; margin:0;">
+                        <span style="font-size:12px; font-family:'Orbitron';">${allRoles[id].name}</span>
+                    </div>
+                    <i class="fa-solid fa-trash-can" style="color:#ff4444; cursor:pointer;" onclick="deleteRole('${id}')"></i>
                 </div>
             `).join('');
         }
 
-        function updateRoleDropdown() {
-            const select = document.getElementById('newMemRole');
-            select.innerHTML = '<option value="">NO ROLE</option>' + 
+        function updateRoleDropdowns() {
+            const options = '<option value="">NO ROLE</option>' + 
                 Object.keys(allRoles).map(id => `<option value="${id}">${allRoles[id].name}</option>`).join('');
+            document.getElementById('newMemRole').innerHTML = options;
+            document.getElementById('editMemRole').innerHTML = options;
         }
 
         function renderAdminMembers() {
             const list = document.getElementById('adminMemberList');
             list.innerHTML = allMembers.map(m => `
-                <div style="background:#000; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px;">${m.name}</span>
-                    <button onclick="deleteMember('${m.id}')" style="background:none; border:1px solid #444; color:red; cursor:pointer; font-size:10px; padding:2px 5px;">DELETE</button>
+                <div style="background:#000; padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; border: 1px solid #222;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${m.image || 'https://via.placeholder.com/150'}" style="width:30px; height:30px; border-radius:5px; object-fit:cover;">
+                        <span style="font-size:12px; font-weight:bold;">${m.name}</span>
+                    </div>
+                    <div style="display:flex; gap:5px;">
+                        <button onclick="openEditMember('${m.id}')" style="background:#444; border:none; color:#fff; cursor:pointer; font-size:10px; padding:5px 10px; border-radius:4px;">EDIT</button>
+                        <button onclick="deleteMember('${m.id}')" style="background:#ff4444; border:none; color:#fff; cursor:pointer; font-size:10px; padding:5px 10px; border-radius:4px;">DEL</button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -247,48 +319,91 @@
         function addRole() {
             const name = document.getElementById('newRoleName').value;
             const color = document.getElementById('newRoleColor').value;
-            if(!name) return alert("ENTER ROLE NAME");
+            if(!name) return customAlert("REQUIRED", "PLEASE ENTER ROLE NAME");
             db.ref('roles').push({ name, color }).then(() => {
                 showNotify("ROLE CREATED");
                 document.getElementById('newRoleName').value = '';
             });
         }
 
-        function deleteRole(id) { if(confirm("DELETE ROLE?")) db.ref('roles').child(id).remove(); }
+        function updateRoleColor(id, newColor) {
+            db.ref('roles').child(id).update({ color: newColor }).then(() => showNotify("ROLE COLOR UPDATED"));
+        }
+
+        function deleteRole(id) { 
+            customAlert("CONFIRM", "DELETE THIS ROLE?", () => {
+                db.ref('roles').child(id).remove(); 
+            }, true);
+        }
 
         function addMember() {
             const name = document.getElementById('newMemName').value;
             const img = document.getElementById('newMemImg').value;
             const fb = document.getElementById('newMemFB').value;
             const roleId = document.getElementById('newMemRole').value;
-            if(!name) return alert("ENTER NAME");
+            if(!name) return customAlert("REQUIRED", "PLEASE ENTER MEMBER NAME");
             db.ref('members').push({ name, image: img, facebook: fb, roleId }).then(() => {
                 showNotify("MEMBER ADDED");
                 ['newMemName','newMemImg','newMemFB'].forEach(id => document.getElementById(id).value = '');
             });
         }
 
-        function deleteMember(id) { if(confirm("DELETE MEMBER?")) db.ref('members').child(id).remove().then(() => showNotify("MEMBER DELETED")); }
+        function openEditMember(id) {
+            const m = allMembers.find(mem => mem.id === id);
+            document.getElementById('editMemId').value = id;
+            document.getElementById('editMemName').value = m.name;
+            document.getElementById('editMemImg').value = m.image || '';
+            document.getElementById('editMemFB').value = m.facebook || '';
+            document.getElementById('editMemRole').value = m.roleId || '';
+            openModal('editMemberModal');
+        }
+
+        function updateMember() {
+            const id = document.getElementById('editMemId').value;
+            const name = document.getElementById('editMemName').value;
+            if(!name) return customAlert("REQUIRED", "NAME CANNOT BE EMPTY");
+            
+            db.ref('members').child(id).update({
+                name: name,
+                image: document.getElementById('editMemImg').value,
+                facebook: document.getElementById('editMemFB').value,
+                roleId: document.getElementById('editMemRole').value
+            }).then(() => {
+                showNotify("MEMBER UPDATED");
+                closeModal('editMemberModal');
+            });
+        }
+
+        function deleteMember(id) { 
+            customAlert("CONFIRM", "DELETE THIS MEMBER?", () => {
+                db.ref('members').child(id).remove().then(() => showNotify("MEMBER DELETED"));
+            }, true);
+        }
 
         function saveConfig() {
             db.ref('config').update({
-                name: document.getElementById('editSiteName').value,
-                desc: document.getElementById('editSiteDesc').value,
-                themeColor: document.getElementById('editThemeColor').value,
-                logo: document.getElementById('editLogoUrl').value
+                name: document.getElementById('configSiteName').value,
+                desc: document.getElementById('configSiteDesc').value,
+                themeColor: document.getElementById('configThemeColor').value,
+                logo: document.getElementById('configLogoUrl').value
             }).then(() => showNotify("SITE UPDATED"));
         }
 
         function loadAdminData() {
-            document.getElementById('editSiteName').value = siteConfig.name || '';
-            document.getElementById('editSiteDesc').value = siteConfig.desc || '';
-            document.getElementById('editThemeColor').value = siteConfig.themeColor || '#ffc107';
-            document.getElementById('editLogoUrl').value = siteConfig.logo || '';
+            document.getElementById('configSiteName').value = siteConfig.name || '';
+            document.getElementById('configSiteDesc').value = siteConfig.desc || '';
+            document.getElementById('configThemeColor').value = siteConfig.themeColor || '#ffc107';
+            document.getElementById('configLogoUrl').value = siteConfig.logo || '';
         }
 
         function toggleMusic() {
             const a = document.getElementById('bgMusic'), i = document.getElementById('musicIcon');
-            if(a.paused) { a.play().then(() => { i.className = 'fa-solid fa-pause'; showNotify("MUSIC ON"); }).catch(() => alert("SET MUSIC URL FIRST")); }
+            if(a.paused) { 
+                a.play().then(() => { 
+                    i.className = 'fa-solid fa-pause'; 
+                    showNotify("MUSIC ON"); 
+                }).catch(() => customAlert("MUSIC", "PLEASE SET A VALID MUSIC URL IN CODE FIRST")); 
+            }
             else { a.pause(); i.className = 'fa-solid fa-play'; }
         }
     </script>
