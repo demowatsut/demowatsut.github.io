@@ -25,7 +25,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* Custom Notification */
         #customAlert {
             position: fixed; top: 20px; right: 20px; z-index: 9999;
             background: var(--accent); color: #000; padding: 15px 30px;
@@ -34,7 +33,6 @@
         }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        /* Nav & Structure */
         .member-count {
             position: fixed; top: 25px; left: 25px; z-index: 101;
             font-family: 'Orbitron'; font-size: 0.7rem; letter-spacing: 2px;
@@ -54,13 +52,12 @@
         .hero-title { font-family: 'Orbitron'; font-size: clamp(2rem, 6vw, 3.5rem); letter-spacing: 15px; text-transform: uppercase; }
         .hero-subtitle { font-size: 1rem; opacity: 0.6; margin-top: 10px; font-family: 'Inter'; }
 
-        /* WELLESLEY Style Glow */
+        /* Glow Text Effect */
         .glow-text {
             text-shadow: 0 0 15px var(--glow-color), 0 0 30px var(--glow-color);
             color: #fff;
         }
 
-        /* Category Filter Buttons */
         .category-container { display: flex; justify-content: center; gap: 15px; margin: 20px auto; flex-wrap: wrap; max-width: 800px; }
         .cat-btn {
             background: transparent; border: 1px solid var(--border); color: #fff;
@@ -69,7 +66,6 @@
         }
         .cat-btn.active { background: #fff; color: #000; }
 
-        /* Grid System 3 per row */
         .grid-container { 
             display: grid; grid-template-columns: repeat(3, 1fr); 
             gap: 25px; padding: 40px 5%; max-width: 1400px; margin: 0 auto;
@@ -92,7 +88,6 @@
         .admin-section { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 15px; border: 1px solid #222; }
         input, select { background: #111; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 8px; width: 100%; margin-top: 5px; margin-bottom: 15px; }
         .music-player { position: fixed; bottom: 30px; right: 30px; z-index: 100; background: #fff; color: #000; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
     </style>
 </head>
@@ -145,6 +140,9 @@
                 <div class="admin-section">
                     <h4 style="color:var(--accent); margin-bottom:15px;">WEB IDENTITY</h4>
                     <label>Site Name</label><input type="text" id="confName">
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                        <input type="checkbox" id="confNameGlow" style="width:auto; margin:0;"> <span>Enable Site Name Glow</span>
+                    </div>
                     <label>Description</label><input type="text" id="confDesc">
                     <label>Description Size</label><input type="range" id="confDescSize" min="0.5" max="3" step="0.1">
                     <label>Alignment</label>
@@ -219,7 +217,13 @@
             document.documentElement.style.setProperty('--glow-color', d.glow || 'rgba(255,255,255,0.5)');
             document.documentElement.style.setProperty('--card-scale', d.cardScale || 1);
             
-            document.getElementById('siteNameDisplay').innerText = d.name || 'GHETTO';
+            const siteNameEl = document.getElementById('siteNameDisplay');
+            siteNameEl.innerText = d.name || 'GHETTO';
+            
+            // Toggle Site Name Glow
+            if(d.nameGlow) { siteNameEl.classList.add('glow-text'); } 
+            else { siteNameEl.classList.remove('glow-text'); }
+
             document.getElementById('siteDescDisplay').innerText = d.desc || '';
             document.getElementById('siteDescDisplay').style.fontSize = (d.descSize || 1) + 'rem';
             document.getElementById('heroArea').style.textAlign = d.align || 'center';
@@ -232,6 +236,7 @@
             
             // Sync Admin Inputs
             document.getElementById('confName').value = d.name || '';
+            document.getElementById('confNameGlow').checked = d.nameGlow || false; // Sync checkbox
             document.getElementById('confDesc').value = d.desc || '';
             document.getElementById('confColor').value = d.color || '#ffc107';
             document.getElementById('confGlow').value = d.glow || '#ffffff';
@@ -239,6 +244,7 @@
             document.getElementById('confLogoSize').value = d.logoSize || 120;
             document.getElementById('confCats').value = d.categories || '';
             document.getElementById('confCardScale').value = d.cardScale || 1;
+            document.getElementById('confAlign').value = d.align || 'center';
 
             // Render Categories
             const cats = d.categories ? d.categories.split(',') : [];
@@ -256,6 +262,7 @@
         async function saveConfig() {
             const data = {
                 name: document.getElementById('confName').value,
+                nameGlow: document.getElementById('confNameGlow').checked, // Save nameGlow state
                 desc: document.getElementById('confDesc').value,
                 descSize: document.getElementById('confDescSize').value,
                 align: document.getElementById('confAlign').value,
@@ -271,7 +278,7 @@
             showAlert();
         }
 
-        // --- Member Logic ---
+        // --- Member Logic (Same as before) ---
         db.ref('members').on('value', snap => {
             allMembers = [];
             const data = snap.val();
