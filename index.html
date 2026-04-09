@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN PANEL | GHETTOTROPHY</title>
+    <title>GHETTOTROPHY</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -13,16 +13,16 @@
         .container { max-width: 1000px; margin: 0 auto; }
         h2 { font-family: 'Orbitron'; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
         .section { background: var(--card); padding: 25px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #222; }
-        input, select, textarea { 
+        input, select { 
             width: 100%; background: #1a1a1a; border: 1px solid #333; padding: 12px; 
-            border-radius: 10px; color: #fff; margin-bottom: 10px; outline: none;
+            border-radius: 10px; color: #fff; margin-bottom: 15px; outline: none;
         }
         button { 
             background: var(--accent); border: none; padding: 12px 25px; border-radius: 10px; 
             font-weight: bold; cursor: pointer; font-family: 'Orbitron'; transition: 0.3s;
         }
         button:hover { opacity: 0.8; transform: translateY(-2px); }
-        .btn-red { background: #ff4b4b; color: white; margin-top: 5px; }
+        .btn-red { background: #ff4b4b; color: white; margin-top: 10px; }
         .member-item { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 15px; border-bottom: 1px solid #222; 
@@ -38,33 +38,33 @@
             <div class="section">
                 <h2>SITE SETTINGS</h2>
                 <label>Site Name</label>
-                <input type="text" id="siteName" placeholder="ชื่อเว็บไซต์">
+                <input type="text" id="siteName">
                 <label>Description</label>
-                <input type="text" id="siteDesc" placeholder="คำอธิบาย">
+                <input type="text" id="siteDesc">
                 <label>Theme Color (Hex)</label>
-                <input type="color" id="themeColor" style="height: 50px;">
-                <label><input type="checkbox" id="glowEnable" style="width: auto;"> Enable Title Glow</label>
+                <input type="color" id="themeColor" style="height: 50px; padding: 5px;">
+                <label><input type="checkbox" id="glowEnable" style="width: auto;"> Enable Glow Effect</label>
                 <br><br>
-                <label>Categories (แยกด้วยลูกน้ำ เช่น ADMIN,MEMBER,VIP)</label>
-                <input type="text" id="siteCats" placeholder="ADMIN,MEMBER">
+                <label>Categories (แยกด้วยลูกน้ำ เช่น MEMBER,VIP,ADMIN)</label>
+                <input type="text" id="siteCats">
                 <button onclick="saveConfig()">UPDATE SITE</button>
             </div>
 
             <div class="section">
-                <h2>ADD MEMBER</h2>
-                <input type="text" id="mName" placeholder="ชื่อสมาชิก">
-                <input type="text" id="mRole" placeholder="ตำแหน่ง (ต้องตรงกับ Category)">
-                <input type="text" id="mImage" placeholder="URL รูปภาพ">
-                <button onclick="addMember()">+ ADD TO DATABASE</button>
+                <h2>ADD NEW MEMBER</h2>
+                <input type="text" id="mName" placeholder="NAME">
+                <input type="text" id="mRole" placeholder="ROLE (ex: ADMIN, MEMBER)">
+                <input type="text" id="mImage" placeholder="IMAGE URL">
+                <button onclick="addMember()">+ ADD MEMBER</button>
             </div>
         </div>
 
         <div class="section">
             <h2>MANAGE MEMBERS</h2>
-            <div id="adminMemberList"></div>
+            <div id="adminList"></div>
         </div>
         
-        <button class="btn-red" onclick="location.href='index.html'">BACK TO SITE</button>
+        <button class="btn-red" onclick="location.href='index.html'">BACK TO HOME</button>
     </div>
 
     <script>
@@ -72,7 +72,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // โหลด Config มาโชว์ใน Input
+        // Load current config
         db.ref('config').on('value', snap => {
             const d = snap.val() || {};
             document.getElementById('siteName').value = d.name || '';
@@ -89,14 +89,14 @@
                 themeColor: document.getElementById('themeColor').value,
                 glowEnable: document.getElementById('glowEnable').checked,
                 categories: document.getElementById('siteCats').value
-            }).then(() => alert("Saved!"));
+            }).then(() => alert("Configuration Updated!"));
         }
 
         function addMember() {
             const name = document.getElementById('mName').value;
             const role = document.getElementById('mRole').value.toUpperCase();
             const image = document.getElementById('mImage').value;
-            if(!name) return alert("Please enter name");
+            if(!name) return alert("Please enter a name");
             db.ref('members').push({ name, role, image });
             document.getElementById('mName').value = '';
         }
@@ -107,18 +107,15 @@
             for(let id in data) {
                 html += `
                     <div class="member-item">
-                        <div>
-                            <strong>${data[id].name}</strong> (${data[id].role})
-                        </div>
+                        <div><strong>${data[id].name}</strong> [${data[id].role}]</div>
                         <button class="btn-red" onclick="deleteMember('${id}')">DELETE</button>
-                    </div>
-                `;
+                    </div>`;
             }
-            document.getElementById('adminMemberList').innerHTML = html;
+            document.getElementById('adminList').innerHTML = html;
         });
 
         function deleteMember(id) {
-            if(confirm('Delete this member?')) db.ref('members').child(id).remove();
+            if(confirm('Are you sure?')) db.ref('members').child(id).remove();
         }
     </script>
 </body>
