@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEMOWATSUT</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Bai+Jamjuree:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -13,297 +13,421 @@
 
     <style>
         :root {
-            --accent: #d4af37; /* สีทอง */
-            --bg-dark: #0a0a0a;
-            --card-bg: rgba(20, 20, 20, 0.8);
-            --text-glow: 0 0 15px rgba(255, 255, 255, 0.5);
+            --accent: #d4af37;
+            --accent-glow: rgba(212, 175, 55, 0.3);
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            margin: 0;
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Bai Jamjuree', sans-serif;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1a1a1a 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #0a0a0a 0%, transparent 30%);
+            min-height: 100vh;
         }
 
-        /* --- Header & Logo --- */
-        .top-bar {
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* --- Header Section --- */
+        .nav-container {
+            padding: 25px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background: rgba(0,0,0,0.5);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .brand-logo-container {
+        .brand-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            letter-spacing: 5px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .admin-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+        }
+
+        .admin-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
             text-align: center;
-            padding: 50px 0;
+            padding: 80px 20px 40px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .main-logo {
-            width: 120px;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+            width: 100px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
         }
 
-        .brand-title {
-            font-size: 3.5rem;
-            font-weight: 900;
+        .main-title {
+            font-family: 'Orbitron';
+            font-size: clamp(2rem, 8vw, 4.5rem);
             letter-spacing: 15px;
-            text-transform: uppercase;
-            margin-top: 10px;
-            text-shadow: var(--text-glow);
+            margin-bottom: 10px;
         }
 
-        .sub-title {
-            font-size: 0.8rem;
-            letter-spacing: 5px;
-            color: #888;
+        /* --- Search & Filter UI --- */
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
         }
 
-        /* --- Search & Filter --- */
-        .search-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto 30px;
+        .search-box {
             position: relative;
+            margin-bottom: 25px;
         }
 
-        .search-bar {
+        .search-box input {
             width: 100%;
-            padding: 15px 25px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px;
-            color: white;
+            padding: 18px 30px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            color: #fff;
+            font-size: 1rem;
             outline: none;
+            transition: var(--transition);
         }
 
-        .filter-buttons {
+        .search-box input:focus {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .filter-group {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 40px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
-        .btn-filter {
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            color: white;
+        .f-btn {
+            background: none;
+            border: 1px solid var(--glass-border);
+            color: #888;
+            padding: 8px 25px;
+            border-radius: 100px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: var(--transition);
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
         }
 
-        .btn-filter.active, .btn-filter:hover {
-            background: var(--accent);
-            color: black;
-            border-color: var(--accent);
+        .f-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
         }
 
-        /* --- Member Grid --- */
-        .member-grid {
+        /* --- Member Cards --- */
+        .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            padding: 0 50px 100px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 0 5% 150px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .member-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 20px;
+        .card {
+            background: linear-gradient(145deg, rgba(15,15,15,1) 0%, rgba(5,5,5,1) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
             display: flex;
             align-items: center;
             gap: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.05));
+            opacity: 0; transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .avatar-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 2px solid var(--glass-border);
+        }
+
+        .info { z-index: 1; }
+        .info h3 { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 5px; color: #eee; }
+        .role-tag {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            background: var(--accent-glow);
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+
+        .fb-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #444;
+            font-size: 1.2rem;
             transition: 0.3s;
         }
+        .card:hover .fb-link { color: #1877F2; }
 
-        .member-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-        }
-
-        .member-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent);
-        }
-
-        .member-info h3 { margin: 0; font-size: 1.1rem; }
-        .member-info p { margin: 5px 0 0; font-size: 0.8rem; color: #888; }
-        .tag-member { background: #333; padding: 2px 10px; border-radius: 10px; font-size: 0.6rem; color: #fff; }
-
-        /* --- Admin Panel Modal --- */
+        /* --- Admin Modal (Tech Style) --- */
         #adminPanel {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            padding: 50px;
-            overflow-y: auto;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            align-items: center;
+            justify-content: center;
         }
 
-        .admin-form {
+        .admin-box {
+            background: #000;
+            width: 90%;
             max-width: 500px;
-            margin: 0 auto;
-            background: #111;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 40px;
             border: 1px solid var(--accent);
+            position: relative;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
         }
 
-        .admin-form input, .admin-form select {
+        .admin-box input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
-            background: #222;
-            border: 1px solid #444;
-            color: white;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            font-family: 'Bai Jamjuree';
         }
 
-        .close-admin { position: absolute; top: 20px; right: 40px; font-size: 2rem; cursor: pointer; }
-
-        /* --- Music Player (Bottom) --- */
-        .music-bar {
+        /* --- Music Bar (Sleek) --- */
+        .music-player {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            padding: 15px;
-            border-radius: 15px;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,10,10,0.8);
+            border: 1px solid var(--glass-border);
+            padding: 12px 30px;
+            border-radius: 100px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            gap: 20px;
+            backdrop-filter: blur(15px);
+            z-index: 99;
+        }
+
+        .play-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #yt-player { display: none; }
     </style>
 </head>
-<body>
+<body id="app">
 
-    <div class="top-bar">
-        <div>DEMOWATSUT PROJECT</div>
-        <div>
-            <span style="cursor:pointer; margin-right: 20px;" onclick="location.reload()"><i class="fas fa-users"></i> Members</span>
-            <span style="cursor:pointer; color: var(--accent);" onclick="toggleAdmin()"><i class="fas fa-lock"></i> Admin</span>
+    <nav class="nav-container">
+        <div class="brand-text">DEMOWATSUT</div>
+        <button class="admin-btn" onclick="toggleAdmin()">SYSTEM ADMIN</button>
+    </nav>
+
+    <header class="hero">
+        <img src="https://img1.pic.in.th/images/cgtlogo2.png" class="main-logo" alt="logo">
+        <h1 class="main-title">DEMO<span style="color:var(--accent)">WATSUT</span></h1>
+        <p style="letter-spacing: 8px; font-size: 0.7rem; color: #555;">MEMBERSHIP ARCHIVE // 2026</p>
+    </header>
+
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="filterSystem()">
+        </div>
+        <div class="filter-group">
+            <button class="f-btn active" onclick="setFilter('all', this)">ALL UNITS</button>
+            <button class="f-btn" onclick="setFilter('leader', this)">LEADERS</button>
+            <button class="f-btn" onclick="setFilter('member', this)">MEMBERS</button>
         </div>
     </div>
 
-    <div class="brand-logo-container">
-        <img src="https://img1.pic.in.th/images/cgtlogo2.png" class="main-logo" alt="logo">
-        <h1 class="brand-title">DEMOWATSUT</h1>
-        <div class="sub-title">SINCE 2026</div>
-    </div>
-
-    <div class="search-container">
-        <input type="text" class="search-bar" placeholder="ค้นหารายชื่อสมาชิก..." onkeyup="searchMember(this.value)">
-    </div>
-
-    <div class="filter-buttons">
-        <button class="btn-filter active">All</button>
-        <button class="btn-filter">Leader</button>
-        <button class="btn-filter">Member</button>
-    </div>
-
-    <div class="member-grid" id="memberList">
-        <p style="text-align: center; grid-column: 1/-1;">กำลังโหลดข้อมูล...</p>
-    </div>
+    <div class="grid-container" id="memberList">
+        </div>
 
     <div id="adminPanel">
-        <span class="close-admin" onclick="toggleAdmin()">&times;</span>
-        <div class="admin-form">
-            <h2><i class="fas fa-user-plus"></i> เพิ่มสมาชิก</h2>
-            <input type="text" id="mName" placeholder="ชื่อ (เช่น Aef Wellesley)">
-            <input type="text" id="mRole" placeholder="ตำแหน่ง (เช่น Leader)">
-            <input type="text" id="mImage" placeholder="URL รูปภาพ">
-            <input type="text" id="mFB" placeholder="ลิงก์ Facebook">
-            <button onclick="addMember()" style="width:100%; padding:10px; background:var(--accent); border:none; font-weight:bold; cursor:pointer;">บันทึกข้อมูล</button>
+        <div class="admin-box">
+            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px; color: var(--accent);">ENTRY_LOG</h2>
+            <input type="text" id="mName" placeholder="NAME">
+            <select id="mRole" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px;">
+                <option value="member">MEMBER</option>
+                <option value="leader">LEADER</option>
+            </select>
+            <input type="text" id="mImage" placeholder="IMAGE URL">
+            <input type="text" id="mFB" placeholder="FACEBOOK URL">
             
-            <hr style="margin: 30px 0; border: 0.5px solid #333;">
-            
-            <h2><i class="fas fa-music"></i> ตั้งค่าเพลง (YouTube ID)</h2>
-            <input type="text" id="musicId" placeholder="YouTube Video ID (เช่น xy3AcmW0lrQ)">
-            <button onclick="updateMusic()" style="width:100%; padding:10px; background:#fff; border:none; font-weight:bold; cursor:pointer;">เปลี่ยนเพลง</button>
+            <div style="display: flex; gap:10px; margin-top: 20px;">
+                <button onclick="addMember()" style="flex:1; padding:15px; background:var(--accent); border:none; cursor:pointer; font-weight:bold;">UPLOAD</button>
+                <button onclick="toggleAdmin()" style="flex:1; padding:15px; background:#222; border:none; color:#fff; cursor:pointer;">CANCEL</button>
+            </div>
+            <hr style="margin:25px 0; border:0.5px solid #222;">
+            <input type="text" id="musicId" placeholder="YOUTUBE VIDEO ID">
+            <button onclick="updateMusic()" style="width:100%; padding:10px; background:#fff; border:none; cursor:pointer; font-weight:bold;">UPDATE BGM</button>
         </div>
     </div>
 
-    <div class="music-bar">
-        <img src="" id="trackCover" style="width:40px; height:40px; border-radius:5px; display:none;">
-        <div>
-            <div id="trackName" style="font-size: 0.7rem; font-weight: bold;">Loading Music...</div>
-            <div style="font-size: 0.5rem; color: var(--accent);">NOW PLAYING</div>
+    <div class="music-player">
+        <div class="play-btn" onclick="toggleMusic()">
+            <i class="fas fa-pause" id="playIcon"></i>
         </div>
-        <button onclick="toggleMusic()" id="playBtn" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-pause"></i></button>
+        <div>
+            <div id="trackName" style="font-size: 0.7rem; font-family: 'Orbitron'; letter-spacing: 1px;">DATABASE_STREAM.MP3</div>
+            <div style="font-size: 0.5rem; color: var(--accent); letter-spacing: 2px;">STATUS: ACTIVE</div>
+        </div>
     </div>
 
     <div id="yt-player"></div>
 
     <script>
-        // --- Firebase Config ---
-        const firebaseConfig = { 
-            databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" 
-        };
+        // --- Firebase Initialize ---
+        const firebaseConfig = { databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // --- Toggle Admin Panel ---
+        let allMembers = [];
+        let currentFilter = 'all';
+
+        // --- Core Functions ---
         function toggleAdmin() {
-            const panel = document.getElementById('adminPanel');
-            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+            const p = document.getElementById('adminPanel');
+            p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // --- Add Member to Firebase ---
-        function addMember() {
-            const name = document.getElementById('mName').value;
-            const role = document.getElementById('mRole').value;
-            const img = document.getElementById('mImage').value || 'https://via.placeholder.com/150';
-            const fb = document.getElementById('mFB').value;
-
-            if(name && role) {
-                db.ref('members').push({
-                    name: name,
-                    role: role,
-                    image: img,
-                    facebook: fb
-                }).then(() => {
-                    alert('เพิ่มสมาชิกสำเร็จ!');
-                    toggleAdmin();
-                });
-            }
+        // Add Member
+        async function addMember() {
+            const data = {
+                name: document.getElementById('mName').value,
+                role: document.getElementById('mRole').value,
+                image: document.getElementById('mImage').value || 'https://via.placeholder.com/150',
+                facebook: document.getElementById('mFB').value || '#'
+            };
+            if(!data.name) return alert("Please enter name");
+            await db.ref('members').push(data);
+            alert("Entry Authorized!");
+            toggleAdmin();
         }
 
-        // --- Load Members from Firebase ---
+        // Real-time Data Sync
         db.ref('members').on('value', snap => {
-            const list = document.getElementById('memberList');
-            list.innerHTML = '';
+            allMembers = [];
             const data = snap.val();
-            for(let id in data) {
-                list.innerHTML += `
-                    <div class="member-card">
-                        <img src="${data[id].image}" class="member-avatar">
-                        <div class="member-info">
-                            <h3>${data[id].name}</h3>
-                            <span class="tag-member">${data[id].role.toUpperCase()}</span>
-                            <p><a href="${data[id].facebook}" target="_blank" style="color:#1877F2; text-decoration:none;"><i class="fab fa-facebook"></i> Facebook</a></p>
-                        </div>
-                    </div>
-                `;
-            }
+            for(let id in data) allMembers.push({...data[id], id});
+            renderMembers();
         });
 
-        // --- Music System ---
-        var player;
+        // Filter Logic
+        function setFilter(role, btn) {
+            currentFilter = role;
+            document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderMembers();
+        }
+
+        function filterSystem() { renderMembers(); }
+
+        function renderMembers() {
+            const list = document.getElementById('memberList');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = allMembers.filter(m => {
+                const matchSearch = m.name.toLowerCase().includes(search);
+                const matchRole = currentFilter === 'all' || m.role === currentFilter;
+                return matchSearch && matchRole;
+            });
+
+            list.innerHTML = filtered.map(m => `
+                <div class="card">
+                    <div class="avatar-wrapper">
+                        <img src="${m.image}" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
+                    </div>
+                    <div class="info">
+                        <span class="role-tag">${m.role}</span>
+                        <h3>${m.name}</h3>
+                        <a href="${m.facebook}" target="_blank" class="fb-link"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- Music Engine ---
+        let player;
         function updateMusic() {
             const id = document.getElementById('musicId').value;
             if(id) db.ref('music').set({ id: id });
@@ -311,25 +435,22 @@
 
         function onYouTubeIframeAPIReady() {
             db.ref('music').on('value', snap => {
-                const m = snap.val() || { id: 'xy3AcmW0lrQ' }; // Default song
+                const m = snap.val() || { id: 'xy3AcmW0lrQ' };
                 if(!player) {
                     player = new YT.Player('yt-player', {
                         height: '0', width: '0', videoId: m.id,
                         playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': m.id },
-                        events: { 'onReady': (e) => {
-                            e.target.setVolume(40);
-                            document.getElementById('trackName').innerText = "TRACK: " + m.id;
-                        }}
+                        events: { 'onReady': e => e.target.setVolume(30) }
                     });
                 } else {
                     player.loadVideoById(m.id);
-                    document.getElementById('trackName').innerText = "TRACK: " + m.id;
                 }
+                document.getElementById('trackName').innerText = "STREAM_ID: " + m.id;
             });
         }
 
         function toggleMusic() {
-            const icon = document.querySelector('#playBtn i');
+            const icon = document.getElementById('playIcon');
             if (player.getPlayerState() === 1) {
                 player.pauseVideo();
                 icon.className = "fas fa-play";
@@ -339,16 +460,11 @@
             }
         }
 
-        // Load YouTube API
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         document.head.append(tag);
 
-        // Click to play (Browser Policy)
-        document.body.addEventListener('click', () => {
-            if(player) player.playVideo();
-        }, { once: true });
-
+        document.addEventListener('click', () => { if(player) player.playVideo(); }, { once: true });
     </script>
 </body>
 </html>
