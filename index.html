@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEMOWATSUT</title>
+    <title>DEMOWATSUT | PREMIER SYSTEM</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Bai+Jamjuree:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -34,12 +34,7 @@
             min-height: 100vh;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-
-        /* --- Header Section --- */
+        /* --- UI Elements --- */
         .nav-container {
             padding: 25px 5%;
             display: flex;
@@ -79,7 +74,6 @@
             box-shadow: 0 0 20px var(--accent-glow);
         }
 
-        /* --- Hero Section --- */
         .hero {
             text-align: center;
             padding: 80px 20px 40px;
@@ -91,12 +85,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .main-logo {
-            width: 100px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px var(--accent-glow));
-        }
-
         .main-title {
             font-family: 'Orbitron';
             font-size: clamp(2rem, 8vw, 4.5rem);
@@ -104,16 +92,11 @@
             margin-bottom: 10px;
         }
 
-        /* --- Search & Filter UI --- */
+        /* --- Search & Filter --- */
         .controls {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto 50px;
             padding: 0 20px;
-        }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 25px;
         }
 
         .search-box input {
@@ -125,19 +108,13 @@
             color: #fff;
             font-size: 1rem;
             outline: none;
-            transition: var(--transition);
-        }
-
-        .search-box input:focus {
-            border-color: var(--accent);
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
         }
 
         .filter-group {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -145,12 +122,12 @@
             background: none;
             border: 1px solid var(--glass-border);
             color: #888;
-            padding: 8px 25px;
+            padding: 8px 15px;
             border-radius: 100px;
             cursor: pointer;
             transition: var(--transition);
             font-family: 'Orbitron';
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         .f-btn.active {
@@ -159,11 +136,11 @@
             border-color: #fff;
         }
 
-        /* --- Member Cards --- */
+        /* --- Cards --- */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
             padding: 0 5% 150px;
             max-width: 1400px;
             margin: 0 auto;
@@ -173,72 +150,44 @@
             background: linear-gradient(145deg, rgba(15,15,15,1) 0%, rgba(5,5,5,1) 100%);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             display: flex;
             align-items: center;
             gap: 20px;
-            position: relative;
-            overflow: hidden;
             transition: var(--transition);
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.05));
-            opacity: 0; transition: var(--transition);
-        }
-
         .card:hover {
-            transform: translateY(-10px) scale(1.02);
+            transform: translateY(-5px);
             border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        .card:hover::before { opacity: 1; }
-
-        .avatar-wrapper {
-            position: relative;
-            z-index: 1;
         }
 
         .avatar {
-            width: 85px;
-            height: 85px;
-            border-radius: 18px;
+            width: 70px; height: 70px;
+            border-radius: 15px;
             object-fit: cover;
-            border: 2px solid var(--glass-border);
+            border: 1px solid var(--glass-border);
         }
 
-        .info { z-index: 1; }
-        .info h3 { font-family: 'Orbitron'; font-size: 1.1rem; margin-bottom: 5px; color: #eee; }
         .role-tag {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             color: var(--accent);
             background: var(--accent-glow);
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 4px;
-        }
-
-        .fb-link {
             display: inline-block;
-            margin-top: 15px;
-            color: #444;
-            font-size: 1.2rem;
-            transition: 0.3s;
+            margin-bottom: 5px;
         }
-        .card:hover .fb-link { color: #1877F2; }
 
-        /* --- Admin Modal (Tech Style) --- */
-        #adminPanel {
+        /* --- Modals --- */
+        .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
             backdrop-filter: blur(20px);
             align-items: center;
             justify-content: center;
@@ -247,24 +196,35 @@
         .admin-box {
             background: #000;
             width: 90%;
-            max-width: 500px;
-            padding: 40px;
+            max-width: 450px;
+            padding: 30px;
             border: 1px solid var(--accent);
-            position: relative;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
         }
 
-        .admin-box input {
+        .admin-box h2 { font-family: 'Orbitron'; color: var(--accent); margin-bottom: 20px; text-align: center; }
+
+        .admin-box input, .admin-box select {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            background: #111;
-            border: 1px solid #333;
+            margin-bottom: 12px;
+            background: #0a0a0a;
+            border: 1px solid #222;
             color: #fff;
             font-family: 'Bai Jamjuree';
         }
 
-        /* --- Music Bar (Sleek) --- */
+        .primary-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            border: none;
+            color: #000;
+            font-weight: 900;
+            font-family: 'Orbitron';
+            cursor: pointer;
+        }
+
+        /* --- Music Bar --- */
         .music-player {
             position: fixed;
             bottom: 30px;
@@ -272,105 +232,120 @@
             transform: translateX(-50%);
             background: rgba(10,10,10,0.8);
             border: 1px solid var(--glass-border);
-            padding: 12px 30px;
+            padding: 10px 25px;
             border-radius: 100px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             backdrop-filter: blur(15px);
             z-index: 99;
-        }
-
-        .play-btn {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: var(--accent);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         #yt-player { display: none; }
     </style>
 </head>
-<body id="app">
+<body>
 
     <nav class="nav-container">
         <div class="brand-text">DEMOWATSUT</div>
-        <button class="admin-btn" onclick="toggleAdmin()">SYSTEM ADMIN</button>
+        <div id="navAction">
+            <button class="admin-btn" onclick="openLogin()">SYSTEM ADMIN</button>
+        </div>
     </nav>
 
     <header class="hero">
-        <img src="https://img1.pic.in.th/images/cgtlogo2.png" class="main-logo" alt="logo">
+        <img src="https://img1.pic.in.th/images/cgtlogo2.png" style="width: 80px; margin-bottom: 20px;" alt="logo">
         <h1 class="main-title">DEMO<span style="color:var(--accent)">WATSUT</span></h1>
-        <p style="letter-spacing: 8px; font-size: 0.7rem; color: #555;">MEMBERSHIP ARCHIVE // 2026</p>
+        <p style="letter-spacing: 8px; font-size: 0.6rem; color: #555;">DATABASE MANAGEMENT SYSTEM</p>
     </header>
 
     <div class="controls">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="filterSystem()">
+            <input type="text" id="searchInput" placeholder="Search members..." onkeyup="renderMembers()">
         </div>
         <div class="filter-group">
-            <button class="f-btn active" onclick="setFilter('all', this)">ALL UNITS</button>
-            <button class="f-btn" onclick="setFilter('leader', this)">LEADERS</button>
-            <button class="f-btn" onclick="setFilter('member', this)">MEMBERS</button>
+            <button class="f-btn active" onclick="setFilter('all', this)">ALL</button>
+            <button class="f-btn" onclick="setFilter('DEMOWATSUT', this)">DEMOWATSUT</button>
+            <button class="f-btn" onclick="setFilter('DEMO', this)">DEMO</button>
+            <button class="f-btn" onclick="setFilter('WINTERFELL DEMO', this)">WINTERFELL</button>
+            <button class="f-btn" onclick="setFilter('DOKKADON', this)">DOKKADON</button>
         </div>
     </div>
 
-    <div class="grid-container" id="memberList">
-        </div>
+    <div class="grid-container" id="memberList"></div>
 
-    <div id="adminPanel">
+    <div id="loginModal" class="modal-overlay">
         <div class="admin-box">
-            <h2 style="font-family: 'Orbitron'; margin-bottom: 20px; color: var(--accent);">ENTRY_LOG</h2>
-            <input type="text" id="mName" placeholder="NAME">
-            <select id="mRole" style="width:100%; padding:12px; background:#111; color:#fff; border:1px solid #333; margin-bottom:10px;">
-                <option value="member">MEMBER</option>
-                <option value="leader">LEADER</option>
+            <h2>LOGIN_REQUIRED</h2>
+            <input type="text" id="user" placeholder="USERNAME">
+            <input type="password" id="pass" placeholder="PASSWORD">
+            <button class="primary-btn" onclick="handleLogin()">ACCESS SYSTEM</button>
+            <button style="width:100%; background:none; border:none; color:#555; margin-top:10px; cursor:pointer;" onclick="closeModals()">CANCEL</button>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="modal-overlay">
+        <div class="admin-box">
+            <h2>ENTRY_LOG</h2>
+            <input type="text" id="mName" placeholder="MEMBER NAME">
+            <label style="font-size: 0.7rem; color: var(--accent);">SELECT UNIT:</label>
+            <select id="mRole">
+                <option value="DEMOWATSUT">DEMOWATSUT</option>
+                <option value="DEMO">DEMO</option>
+                <option value="WINTERFELL DEMO">WINTERFELL DEMO</option>
+                <option value="DOKKADON">DOKKADON</option>
             </select>
             <input type="text" id="mImage" placeholder="IMAGE URL">
             <input type="text" id="mFB" placeholder="FACEBOOK URL">
+            <button class="primary-btn" onclick="addMember()">UPLOAD DATA</button>
             
-            <div style="display: flex; gap:10px; margin-top: 20px;">
-                <button onclick="addMember()" style="flex:1; padding:15px; background:var(--accent); border:none; cursor:pointer; font-weight:bold;">UPLOAD</button>
-                <button onclick="toggleAdmin()" style="flex:1; padding:15px; background:#222; border:none; color:#fff; cursor:pointer;">CANCEL</button>
-            </div>
-            <hr style="margin:25px 0; border:0.5px solid #222;">
+            <hr style="border:0.5px solid #222; margin:15px 0;">
             <input type="text" id="musicId" placeholder="YOUTUBE VIDEO ID">
-            <button onclick="updateMusic()" style="width:100%; padding:10px; background:#fff; border:none; cursor:pointer; font-weight:bold;">UPDATE BGM</button>
+            <button class="primary-btn" style="background:#fff;" onclick="updateMusic()">UPDATE BGM</button>
+            <button style="width:100%; background:none; border:none; color:#555; margin-top:15px; cursor:pointer;" onclick="handleLogout()">LOGOUT</button>
         </div>
     </div>
 
     <div class="music-player">
-        <div class="play-btn" onclick="toggleMusic()">
-            <i class="fas fa-pause" id="playIcon"></i>
-        </div>
+        <button onclick="toggleMusic()" style="background:var(--accent); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer;">
+            <i class="fas fa-pause" id="playIcon" style="font-size: 0.8rem;"></i>
+        </button>
         <div>
-            <div id="trackName" style="font-size: 0.7rem; font-family: 'Orbitron'; letter-spacing: 1px;">DATABASE_STREAM.MP3</div>
-            <div style="font-size: 0.5rem; color: var(--accent); letter-spacing: 2px;">STATUS: ACTIVE</div>
+            <div id="trackName" style="font-size: 0.6rem; font-family: 'Orbitron';">DATABASE_STREAM.MP3</div>
+            <div style="font-size: 0.4rem; color: var(--accent);">STATUS: CONNECTED</div>
         </div>
     </div>
 
     <div id="yt-player"></div>
 
     <script>
-        // --- Firebase Initialize ---
         const firebaseConfig = { databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let allMembers = [];
         let currentFilter = 'all';
+        let isAdmin = false;
 
-        // --- Core Functions ---
-        function toggleAdmin() {
-            const p = document.getElementById('adminPanel');
-            p.style.display = (p.style.display === 'flex') ? 'none' : 'flex';
+        function openLogin() {
+            if(isAdmin) document.getElementById('adminPanel').style.display = 'flex';
+            else document.getElementById('loginModal').style.display = 'flex';
         }
 
-        // Add Member
+        function handleLogin() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            if(u === 'demowatsut' && p === 'demo912') {
+                isAdmin = true;
+                closeModals();
+                document.getElementById('adminPanel').style.display = 'flex';
+                document.getElementById('navAction').innerHTML = `<button class="admin-btn" style="border-color:var(--accent)" onclick="openLogin()">ADMIN PANEL</button>`;
+            } else { alert("Wrong credentials"); }
+        }
+
+        function handleLogout() { isAdmin = false; location.reload(); }
+        function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
+
         async function addMember() {
             const data = {
                 name: document.getElementById('mName').value,
@@ -378,13 +353,12 @@
                 image: document.getElementById('mImage').value || 'https://via.placeholder.com/150',
                 facebook: document.getElementById('mFB').value || '#'
             };
-            if(!data.name) return alert("Please enter name");
+            if(!data.name) return alert("Enter Name");
             await db.ref('members').push(data);
-            alert("Entry Authorized!");
-            toggleAdmin();
+            alert("Member Added!");
+            document.getElementById('mName').value = '';
         }
 
-        // Real-time Data Sync
         db.ref('members').on('value', snap => {
             allMembers = [];
             const data = snap.val();
@@ -392,7 +366,6 @@
             renderMembers();
         });
 
-        // Filter Logic
         function setFilter(role, btn) {
             currentFilter = role;
             document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
@@ -400,12 +373,9 @@
             renderMembers();
         }
 
-        function filterSystem() { renderMembers(); }
-
         function renderMembers() {
             const list = document.getElementById('memberList');
             const search = document.getElementById('searchInput').value.toLowerCase();
-            
             const filtered = allMembers.filter(m => {
                 const matchSearch = m.name.toLowerCase().includes(search);
                 const matchRole = currentFilter === 'all' || m.role === currentFilter;
@@ -414,19 +384,16 @@
 
             list.innerHTML = filtered.map(m => `
                 <div class="card">
-                    <div class="avatar-wrapper">
-                        <img src="${m.image}" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
-                    </div>
+                    <img src="${m.image}" class="avatar" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="info">
                         <span class="role-tag">${m.role}</span>
-                        <h3>${m.name}</h3>
-                        <a href="${m.facebook}" target="_blank" class="fb-link"><i class="fab fa-facebook"></i></a>
+                        <h3 style="font-family:'Orbitron'; font-size:1rem;">${m.name}</h3>
+                        <a href="${m.facebook}" target="_blank" style="color:#555; margin-top:10px; display:block;"><i class="fab fa-facebook"></i></a>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- Music Engine ---
         let player;
         function updateMusic() {
             const id = document.getElementById('musicId').value;
@@ -442,28 +409,20 @@
                         playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': m.id },
                         events: { 'onReady': e => e.target.setVolume(30) }
                     });
-                } else {
-                    player.loadVideoById(m.id);
-                }
-                document.getElementById('trackName').innerText = "STREAM_ID: " + m.id;
+                } else { player.loadVideoById(m.id); }
+                document.getElementById('trackName').innerText = "SID: " + m.id;
             });
         }
 
         function toggleMusic() {
             const icon = document.getElementById('playIcon');
-            if (player.getPlayerState() === 1) {
-                player.pauseVideo();
-                icon.className = "fas fa-play";
-            } else {
-                player.playVideo();
-                icon.className = "fas fa-pause";
-            }
+            if (player.getPlayerState() === 1) { player.pauseVideo(); icon.className = "fas fa-play"; }
+            else { player.playVideo(); icon.className = "fas fa-pause"; }
         }
 
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         document.head.append(tag);
-
         document.addEventListener('click', () => { if(player) player.playVideo(); }, { once: true });
     </script>
 </body>
