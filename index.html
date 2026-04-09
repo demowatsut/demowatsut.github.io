@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GHETTOTROPHY</title>
+    <title id="pageTitle">GHETTOTROPHY</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&family=Bai+Jamjuree:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,24 +15,27 @@
         :root {
             --accent: #ffffff;
             --bg: #050505;
-            --card-bg: rgba(20, 20, 20, 0.6);
+            --card-bg: rgba(20, 20, 20, 0.4);
             --border: rgba(255, 255, 255, 0.08);
             --text-secondary: #aaa;
             --fb-color: #00a2ed;
-            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg);
             color: #fff;
             font-family: 'Inter', 'Bai Jamjuree', sans-serif;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             overflow-x: hidden;
         }
+
+        /* Smooth Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
 
         .top-nav {
             padding: 20px 5%;
@@ -42,81 +45,115 @@
             position: fixed;
             width: 100%;
             z-index: 100;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            backdrop-filter: blur(12px);
         }
 
         .nav-btn { 
-            color: #fff; 
-            text-decoration: none; 
-            cursor: pointer; 
-            font-size: 0.75rem; 
-            font-weight: 600; 
-            opacity: 0.6;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            color: #fff; text-decoration: none; cursor: pointer; font-size: 0.7rem; font-weight: 600; 
+            opacity: 0.5; transition: var(--transition); display: flex; align-items: center; gap: 8px;
+            letter-spacing: 1.5px; text-transform: uppercase;
         }
-        .nav-btn:hover { opacity: 1; transform: translateY(-1px); }
+        .nav-btn:hover, .nav-btn.active { opacity: 1; transform: translateY(-1px); }
 
         .hero-section { 
-            text-align: center; 
-            padding: 120px 20px 60px; 
-            background: radial-gradient(circle at 50% 50%, #151515 0%, #050505 100%);
+            text-align: center; padding: 160px 20px 80px; 
+            background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
         }
-        .main-logo { width: 110px; height: auto; margin-bottom: 25px; filter: drop-shadow(0 0 20px rgba(255,255,255,0.15)); transition: 0.5s; }
-        .hero-title { font-family: 'Orbitron'; font-size: 2.8rem; letter-spacing: 15px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; background: linear-gradient(to bottom, #fff 40%, #444 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-subtitle { font-size: 0.65rem; color: var(--text-secondary); letter-spacing: 8px; text-transform: uppercase; opacity: 0.8; }
+        .main-logo { width: 120px; height: auto; margin-bottom: 30px; filter: drop-shadow(0 0 30px rgba(255,255,255,0.1)); transition: 0.8s; }
+        .hero-title { font-family: 'Orbitron'; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 12px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; background: linear-gradient(to bottom, #fff 30%, #555 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 6px; text-transform: uppercase; opacity: 0.7; }
 
-        .container { max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 30px; }
+        .container { max-width: 1300px; margin: 0 auto; width: 100%; padding: 0 40px; }
         
-        .search-area { margin-bottom: 50px; }
-        .search-box { position: relative; max-width: 500px; margin: 0 auto 25px; }
-        .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #555; }
-        .search-box input { width: 100%; padding: 14px 20px 14px 50px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; }
+        /* Search & Filter UI */
+        .search-area { margin-bottom: 60px; animation: fadeIn 1s ease forwards; }
+        .search-box { position: relative; max-width: 450px; margin: 0 auto 30px; }
+        .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #444; }
+        .search-box input { 
+            width: 100%; padding: 16px 20px 16px 50px; background: rgba(255,255,255,0.02); 
+            border: 1px solid var(--border); border-radius: 14px; color: #fff; outline: none;
+            transition: var(--transition);
+        }
+        .search-box input:focus { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
 
-        .filter-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .f-btn { background: transparent; border: 1px solid var(--border); color: #888; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
-        .f-btn.active { background: #fff; color: #000; border-color: #fff; transform: translateY(-2px); }
+        .filter-group { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .f-btn { 
+            background: transparent; border: 1px solid var(--border); color: #666; padding: 10px 24px; 
+            border-radius: 10px; cursor: pointer; font-size: 0.65rem; font-weight: 700; 
+            text-transform: uppercase; transition: var(--transition); letter-spacing: 1px;
+        }
+        .f-btn.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 80px; }
-        .member-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 22px; display: flex; align-items: center; gap: 20px; transition: var(--transition); backdrop-filter: blur(5px); }
-        .member-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
-        .avatar-wrapper { width: 70px; height: 70px; border-radius: 50%; padding: 4px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; overflow: hidden; }
-        .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        /* Grid UI */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding-bottom: 100px; }
+        .member-card { 
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; 
+            padding: 24px; display: flex; align-items: center; gap: 20px; 
+            transition: var(--transition); backdrop-filter: blur(10px);
+        }
+        .member-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-8px) scale(1.02); background: rgba(40, 40, 40, 0.5); }
+        .avatar-wrapper { width: 75px; height: 75px; border-radius: 50%; padding: 3px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; overflow: hidden; }
+        .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: grayscale(20%); transition: 0.5s; }
+        .member-card:hover img { filter: grayscale(0%); transform: scale(1.1); }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(15px); }
-        .admin-window { background: #0a0a0a; width: 100%; max-width: 650px; max-height: 85vh; border-radius: 24px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
-        .admin-body { padding: 25px; overflow-y: auto; }
-        input, select { width: 100%; padding: 14px; background: #000; border: 1px solid #222; color: #fff; border-radius: 12px; margin-top: 8px; }
-        .btn-main { width: 100%; padding: 16px; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        /* Admin UI Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(20px); animation: fadeIn 0.3s ease; }
+        .admin-window { 
+            background: #0d0d0d; width: 100%; max-width: 700px; max-height: 85vh; 
+            border-radius: 28px; border: 1px solid #222; overflow: hidden; 
+            display: flex; flex-direction: column; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+        .admin-header { padding: 25px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
+        .admin-body { padding: 30px; overflow-y: auto; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { font-size: 0.7rem; color: #555; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        input { 
+            width: 100%; padding: 14px 18px; background: #000; border: 1px solid #222; 
+            color: #fff; border-radius: 12px; margin-top: 8px; transition: 0.3s;
+        }
+        input:focus { border-color: #444; outline: none; }
+        
+        .btn-main { 
+            width: 100%; padding: 16px; background: #fff; color: #000; border: none; 
+            border-radius: 14px; font-weight: 800; cursor: pointer; margin-top: 10px;
+            transition: var(--transition); font-size: 0.8rem; letter-spacing: 1px;
+        }
+        .btn-main:hover { transform: translateY(-2px); filter: brightness(0.9); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .member-card { animation: fadeIn 0.5s ease forwards; }
+        /* Custom Notification UI */
+        #customToast {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #fff; color: #000; padding: 20px 40px; border-radius: 50px;
+            z-index: 2000; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: toastAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes toastAnim { from { opacity: 0; transform: translate(-50%, -20%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div id="customToast">ACTION SUCCESSFUL</div>
+
     <nav class="top-nav">
         <a class="nav-btn" onclick="setFilter('all')"><i class="fa-solid fa-globe"></i> ALL</a>
-        <a class="nav-btn" onclick="setFilter('GHETTOTROPHY')"><i class="fa-solid fa-users"></i> GHETTOTROPHY</a>
         <a class="nav-btn" onclick="openAdmin()"><i class="fa-solid fa-shield-halved"></i> SYSTEM</a>
     </nav>
 
     <header class="hero-section">
-        <img src="" alt="" class="main-logo" id="siteLogo">
-        <h1 class="hero-title">GHETTOTROPHY</h1>
-        <p class="hero-subtitle">Not a perfect gang but try to be the best.</p>
+        <img src="" alt="LOGO" class="main-logo" id="siteLogo">
+        <h1 class="hero-title" id="siteNameDisplay">LOADING...</h1>
+        <p class="hero-subtitle" id="siteSubDisplay">Please wait</p>
     </header>
 
     <div class="container">
         <div class="search-area">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" placeholder="Search members..." onkeyup="renderMembers()">
+                <input type="text" id="searchInput" placeholder="Find members..." onkeyup="renderMembers()">
             </div>
             <div class="filter-group" id="filterArea"></div>
         </div>
@@ -124,44 +161,78 @@
     </div>
 
     <div id="loginModal" class="modal">
-        <div class="admin-window" style="max-width: 380px;">
+        <div class="admin-window" style="max-width: 350px;">
             <div class="admin-body" style="text-align: center;">
-                <h3 style="font-family: 'Orbitron'; margin-bottom: 20px;">SYSTEM ACCESS</h3>
-                <input type="password" id="adminPass" placeholder="Password">
-                <button class="btn-main" onclick="handleLogin()">LOGIN</button>
-                <p onclick="closeModals()" style="margin-top: 20px; cursor: pointer; font-size: 0.7rem; opacity: 0.5;">CLOSE</p>
+                <h3 style="font-family: 'Orbitron'; margin-bottom: 25px; font-size: 1rem;">ACCESS KEY</h3>
+                <input type="password" id="adminPass" placeholder="••••••••" style="text-align: center;">
+                <button class="btn-main" onclick="handleLogin()">ENTER SYSTEM</button>
+                <p onclick="closeModals()" style="margin-top: 25px; cursor: pointer; font-size: 0.6rem; opacity: 0.4; letter-spacing: 2px;">BACK TO HOME</p>
             </div>
         </div>
     </div>
 
     <div id="adminPanel" class="modal">
         <div class="admin-window">
+            <div class="admin-header">
+                <h2 style="font-family: 'Orbitron'; font-size: 0.9rem; letter-spacing: 2px;">SYSTEM CONTROL</h2>
+                <i class="fa-solid fa-xmark" onclick="closeModals()" style="cursor:pointer; opacity:0.5;"></i>
+            </div>
             <div class="admin-body">
-                <h3 style="font-family: 'Orbitron'; margin-bottom: 20px;">MEMBER MANAGEMENT</h3>
-                <input type="hidden" id="editId">
-                <input type="text" id="mName" placeholder="Name">
-                <input type="text" id="mImg" placeholder="Avatar URL">
-                <input type="text" id="mFB" placeholder="Facebook URL">
-                <div id="mRoleCheckboxes" style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
-                <button class="btn-main" id="saveBtn" onclick="saveMember()">SAVE MEMBER</button>
-                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #222;">
-                <div id="adminMemberList"></div>
-                <button class="btn-main" onclick="closeModals()" style="background: #222; color: #fff;">EXIT SYSTEM</button>
+                
+                <div style="background: #111; padding: 20px; border-radius: 18px; margin-bottom: 30px; border: 1px solid #1a1a1a;">
+                    <h4 style="font-size: 0.7rem; color: #fff; margin-bottom: 15px; letter-spacing: 1px;"><i class="fa-solid fa-gears"></i> WEBSITE SETTINGS</h4>
+                    <div class="form-group">
+                        <label>Site Name</label>
+                        <input type="text" id="confName" placeholder="Ex: GHETTOTROPHY">
+                    </div>
+                    <div class="form-group">
+                        <label>Site Logo URL</label>
+                        <input type="text" id="confLogo" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Slogan / Subtitle</label>
+                        <input type="text" id="confSub" placeholder="Your gang slogan...">
+                    </div>
+                    <button class="btn-main" onclick="saveConfig()" style="background: #222; color: #fff;">UPDATE WEBSITE</button>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid #1a1a1a;">
+                    <h4 style="font-size: 0.7rem; color: #fff; margin-bottom: 15px; letter-spacing: 1px;"><i class="fa-solid fa-user-plus"></i> MANAGE MEMBER</h4>
+                    <input type="hidden" id="editId">
+                    <div class="form-group"><label>Name</label><input type="text" id="mName"></div>
+                    <div class="form-group"><label>Avatar URL</label><input type="text" id="mImg"></div>
+                    <div class="form-group"><label>Facebook URL</label><input type="text" id="mFB"></div>
+                    <div id="mRoleCheckboxes" style="margin: 15px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
+                    <button class="btn-main" id="saveBtn" onclick="saveMember()">SAVE MEMBER DATA</button>
+                    
+                    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #1a1a1a;">
+                    <div id="adminMemberList"></div>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
+        // --- Firebase Config (Your Original URL) ---
         const firebaseConfig = { databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         let allMembers = [];
+        let siteConfig = {};
         let currentFilter = 'all';
         let isAdmin = false;
-        
-        // แก้ไขหมวดหมู่ที่นี่
-        const defaultCats = ["GHETTOTROPHY"]; 
+        const defaultCats = ["GHETTOTROPHY", "CAPTAIN", "MEMBER"]; // เพิ่มหมวดหมู่พื้นฐานได้ที่นี่
+
+        // --- Core Functions ---
+
+        function showToast(text) {
+            const toast = document.getElementById('customToast');
+            toast.innerText = text;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
+        }
 
         function openAdmin() { isAdmin ? document.getElementById('adminPanel').style.display='flex' : document.getElementById('loginModal').style.display='flex'; }
         function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
@@ -169,9 +240,34 @@
         function handleLogin() {
             if(document.getElementById('adminPass').value === 'demo912') { 
                 isAdmin = true; closeModals(); openAdmin(); 
-            } else { alert("Wrong Password"); }
+            } else { alert("Access Denied"); }
         }
 
+        // --- Config Management ---
+        db.ref('config').on('value', snap => {
+            siteConfig = snap.val() || { name: 'GHETTOTROPHY', logo: '', subtitle: 'Not a perfect gang but try to be the best.' };
+            document.getElementById('siteNameDisplay').innerText = siteConfig.name;
+            document.getElementById('pageTitle').innerText = siteConfig.name;
+            document.getElementById('siteSubDisplay').innerText = siteConfig.subtitle;
+            document.getElementById('siteLogo').src = siteConfig.logo;
+            
+            // Fill inputs in admin
+            document.getElementById('confName').value = siteConfig.name;
+            document.getElementById('confLogo').value = siteConfig.logo;
+            document.getElementById('confSub').value = siteConfig.subtitle;
+        });
+
+        async function saveConfig() {
+            const data = {
+                name: document.getElementById('confName').value,
+                logo: document.getElementById('confLogo').value,
+                subtitle: document.getElementById('confSub').value
+            };
+            await db.ref('config').set(data);
+            showToast("WEBSITE UPDATED");
+        }
+
+        // --- Member Management ---
         function setFilter(role) {
             currentFilter = role;
             renderMembers();
@@ -185,7 +281,7 @@
             let checkHtml = '';
             defaultCats.forEach(name => {
                 filterHtml += `<button class="f-btn" data-role="${name}" onclick="setFilter('${name}')">${name}</button>`;
-                checkHtml += `<label style="font-size:0.7rem;"><input type="checkbox" name="roles" value="${name}" checked> ${name}</label>`;
+                checkHtml += `<label><input type="checkbox" name="roles" value="${name}"> ${name}</label>`;
             });
             document.getElementById('filterArea').innerHTML = filterHtml;
             document.getElementById('mRoleCheckboxes').innerHTML = checkHtml;
@@ -198,9 +294,9 @@
             for(let id in data) {
                 const m = {...data[id], id};
                 allMembers.push(m);
-                adminList += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:0.8rem; background: #111; padding: 10px; border-radius: 8px;">
+                adminList += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:0.75rem; background: #000; padding: 12px 18px; border-radius: 12px; border: 1px solid #1a1a1a;">
                     <span>${m.name}</span>
-                    <span style="display:flex; gap:15px;"><i class="fa-solid fa-pen" style="cursor:pointer;" onclick="editMember('${id}')"></i> <i class="fa-solid fa-trash" style="cursor:pointer; color:#ff4444;" onclick="deleteMember('${id}')"></i></span>
+                    <span style="display:flex; gap:15px; opacity:0.6;"><i class="fa-solid fa-pen" style="cursor:pointer;" onclick="editMember('${id}')"></i> <i class="fa-solid fa-trash" style="cursor:pointer; color:#ff4444;" onclick="deleteMember('${id}')"></i></span>
                 </div>`;
             }
             document.getElementById('adminMemberList').innerHTML = adminList;
@@ -211,19 +307,17 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             const filtered = allMembers.filter(m => {
                 const roles = Array.isArray(m.role) ? m.role : [m.role];
-                const matchesSearch = m.name.toLowerCase().includes(search);
-                const matchesFilter = (currentFilter === 'all' || roles.includes(currentFilter));
-                return matchesSearch && matchesFilter;
+                return m.name.toLowerCase().includes(search) && (currentFilter === 'all' || roles.includes(currentFilter));
             });
 
             document.getElementById('memberList').innerHTML = filtered.map(m => `
                 <div class="member-card">
                     <div class="avatar-wrapper"><img src="${m.image}" onerror="this.src='https://via.placeholder.com/150'"></div>
                     <div class="member-info">
-                        <h3 style="font-size:1.1rem; margin-bottom:5px;">${m.name}</h3>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <span style="font-size:0.6rem; background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:4px; letter-spacing:1px; color:var(--text-secondary);">${Array.isArray(m.role) ? m.role[0] : m.role}</span>
-                            <a href="${m.facebook}" target="_blank" style="color:var(--fb-color); font-size:0.9rem;"><i class="fa-brands fa-facebook"></i></a>
+                        <h3 style="font-size:1rem; margin-bottom:6px; font-weight:700; letter-spacing:0.5px;">${m.name}</h3>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <span style="font-size:0.55rem; background:rgba(255,255,255,0.08); padding:4px 10px; border-radius:6px; letter-spacing:1px; color:#888; text-transform:uppercase; font-weight:700;">${Array.isArray(m.role) ? m.role[0] : m.role}</span>
+                            <a href="${m.facebook}" target="_blank" style="color:var(--fb-color); font-size:0.85rem; opacity:0.8; transition:0.3s;"><i class="fa-brands fa-facebook"></i></a>
                         </div>
                     </div>
                 </div>
@@ -233,15 +327,18 @@
         async function saveMember() {
             const id = document.getElementById('editId').value;
             const roles = Array.from(document.querySelectorAll('input[name="roles"]:checked')).map(cb => cb.value);
+            if(!document.getElementById('mName').value) return alert("Enter Name");
+            
             const data = {
                 name: document.getElementById('mName').value,
-                role: roles.length > 0 ? roles : ["GHETTOTROPHY"],
+                role: roles.length > 0 ? roles : ["MEMBER"],
                 image: document.getElementById('mImg').value || 'https://via.placeholder.com/150',
                 facebook: document.getElementById('mFB').value || '#'
             };
-            if(!data.name) return alert("Please enter a name");
+            
             id ? await db.ref('members/'+id).set(data) : await db.ref('members').push(data);
-            alert("Success!"); resetForm();
+            showToast(id ? "MEMBER UPDATED" : "MEMBER ADDED");
+            resetForm();
         }
 
         function editMember(id) {
@@ -251,21 +348,20 @@
             document.getElementById('mImg').value = m.image;
             document.getElementById('mFB').value = m.facebook;
             document.getElementById('saveBtn').innerText = "UPDATE MEMBER";
-            
-            // Set checkboxes
             const roles = Array.isArray(m.role) ? m.role : [m.role];
-            document.querySelectorAll('input[name="roles"]').forEach(cb => {
-                cb.checked = roles.includes(cb.value);
-            });
+            document.querySelectorAll('input[name="roles"]').forEach(cb => cb.checked = roles.includes(cb.value));
+            document.querySelector('.admin-body').scrollTop = 0;
         }
 
-        async function deleteMember(id) { if(confirm("Delete this member?")) await db.ref('members/'+id).remove(); }
+        async function deleteMember(id) { if(confirm("Delete this member?")) { await db.ref('members/'+id).remove(); showToast("MEMBER DELETED"); } }
+        
         function resetForm() { 
             document.getElementById('editId').value = '';
             document.getElementById('mName').value = '';
             document.getElementById('mImg').value = '';
             document.getElementById('mFB').value = '';
-            document.getElementById('saveBtn').innerText = "SAVE MEMBER"; 
+            document.getElementById('saveBtn').innerText = "SAVE MEMBER DATA";
+            document.querySelectorAll('input[name="roles"]').forEach(cb => cb.checked = false);
         }
 
         renderCategories();
