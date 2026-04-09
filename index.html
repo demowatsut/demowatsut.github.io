@@ -34,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* Nav & Layout Styles */
         .top-nav {
             padding: 20px 5%;
             display: flex;
@@ -59,6 +58,7 @@
             align-items: center;
             gap: 8px;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
         .nav-btn:hover { opacity: 1; transform: translateY(-1px); }
 
@@ -73,7 +73,6 @@
 
         .container { max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 30px; }
         
-        /* Filter & Search */
         .search-area { margin-bottom: 50px; }
         .search-box { position: relative; max-width: 500px; margin: 0 auto 25px; }
         .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #555; }
@@ -83,14 +82,12 @@
         .f-btn { background: transparent; border: 1px solid var(--border); color: #888; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
         .f-btn.active { background: #fff; color: #000; border-color: #fff; transform: translateY(-2px); }
 
-        /* Card Styles */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 80px; }
         .member-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 22px; display: flex; align-items: center; gap: 20px; transition: var(--transition); backdrop-filter: blur(5px); }
         .member-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
-        .avatar-wrapper { width: 70px; height: 70px; border-radius: 50%; padding: 4px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+        .avatar-wrapper { width: 70px; height: 70px; border-radius: 50%; padding: 4px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; overflow: hidden; }
         .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-        /* Admin UI */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(15px); }
         .admin-window { background: #0a0a0a; width: 100%; max-width: 650px; max-height: 85vh; border-radius: 24px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
         .admin-body { padding: 25px; overflow-y: auto; }
@@ -105,7 +102,7 @@
 
     <nav class="top-nav">
         <a class="nav-btn" onclick="setFilter('all')"><i class="fa-solid fa-globe"></i> ALL</a>
-        <a class="nav-btn" onclick="setFilter('MEMBER')"><i class="fa-solid fa-users"></i> MEMBERS</a>
+        <a class="nav-btn" onclick="setFilter('GHETTOTROPHY')"><i class="fa-solid fa-users"></i> GHETTOTROPHY</a>
         <a class="nav-btn" onclick="openAdmin()"><i class="fa-solid fa-shield-halved"></i> SYSTEM</a>
     </nav>
 
@@ -123,7 +120,6 @@
             </div>
             <div class="filter-group" id="filterArea"></div>
         </div>
-
         <div id="memberList" class="grid-container"></div>
     </div>
 
@@ -156,7 +152,6 @@
     </div>
 
     <script>
-        // CONFIG
         const firebaseConfig = { databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -164,7 +159,9 @@
         let allMembers = [];
         let currentFilter = 'all';
         let isAdmin = false;
-        const defaultCats = ["LEADER", "MEMBER", "WELLESLEY", "KODOMO"];
+        
+        // แก้ไขหมวดหมู่ที่นี่
+        const defaultCats = ["GHETTOTROPHY"]; 
 
         function openAdmin() { isAdmin ? document.getElementById('adminPanel').style.display='flex' : document.getElementById('loginModal').style.display='flex'; }
         function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
@@ -175,28 +172,25 @@
             } else { alert("Wrong Password"); }
         }
 
-        // Filter Logic
         function setFilter(role) {
             currentFilter = role;
             renderMembers();
-            // Update UI
             document.querySelectorAll('.f-btn').forEach(b => {
-                b.classList.toggle('active', b.innerText.toLowerCase() === role.toLowerCase());
+                b.classList.toggle('active', b.getAttribute('data-role') === role);
             });
         }
 
         function renderCategories() {
-            let filterHtml = `<button class="f-btn active" onclick="setFilter('all')">All</button>`;
+            let filterHtml = `<button class="f-btn active" data-role="all" onclick="setFilter('all')">ALL</button>`;
             let checkHtml = '';
             defaultCats.forEach(name => {
-                filterHtml += `<button class="f-btn" onclick="setFilter('${name}')">${name}</button>`;
-                checkHtml += `<label style="font-size:0.7rem;"><input type="checkbox" name="roles" value="${name}"> ${name}</label>`;
+                filterHtml += `<button class="f-btn" data-role="${name}" onclick="setFilter('${name}')">${name}</button>`;
+                checkHtml += `<label style="font-size:0.7rem;"><input type="checkbox" name="roles" value="${name}" checked> ${name}</label>`;
             });
             document.getElementById('filterArea').innerHTML = filterHtml;
             document.getElementById('mRoleCheckboxes').innerHTML = checkHtml;
         }
 
-        // Data Sync
         db.ref('members').on('value', snap => {
             allMembers = [];
             const data = snap.val();
@@ -204,9 +198,9 @@
             for(let id in data) {
                 const m = {...data[id], id};
                 allMembers.push(m);
-                adminList += `<div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.8rem;">
+                adminList += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:0.8rem; background: #111; padding: 10px; border-radius: 8px;">
                     <span>${m.name}</span>
-                    <span><i class="fa-solid fa-pen" onclick="editMember('${id}')"></i> <i class="fa-solid fa-trash" onclick="deleteMember('${id}')"></i></span>
+                    <span style="display:flex; gap:15px;"><i class="fa-solid fa-pen" style="cursor:pointer;" onclick="editMember('${id}')"></i> <i class="fa-solid fa-trash" style="cursor:pointer; color:#ff4444;" onclick="deleteMember('${id}')"></i></span>
                 </div>`;
             }
             document.getElementById('adminMemberList').innerHTML = adminList;
@@ -224,30 +218,30 @@
 
             document.getElementById('memberList').innerHTML = filtered.map(m => `
                 <div class="member-card">
-                    <div class="avatar-wrapper"><img src="${m.image}"></div>
+                    <div class="avatar-wrapper"><img src="${m.image}" onerror="this.src='https://via.placeholder.com/150'"></div>
                     <div class="member-info">
-                        <h3>${m.name}</h3>
+                        <h3 style="font-size:1.1rem; margin-bottom:5px;">${m.name}</h3>
                         <div style="display:flex; gap:10px; align-items:center;">
-                            <span style="font-size:0.6rem; background:#222; padding:3px 8px; border-radius:4px;">${Array.isArray(m.role) ? m.role[0] : m.role}</span>
-                            <a href="${m.facebook}" target="_blank" style="color:var(--fb-color); font-size:0.8rem;"><i class="fa-brands fa-facebook"></i></a>
+                            <span style="font-size:0.6rem; background:rgba(255,255,255,0.1); padding:3px 8px; border-radius:4px; letter-spacing:1px; color:var(--text-secondary);">${Array.isArray(m.role) ? m.role[0] : m.role}</span>
+                            <a href="${m.facebook}" target="_blank" style="color:var(--fb-color); font-size:0.9rem;"><i class="fa-brands fa-facebook"></i></a>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Member Actions
         async function saveMember() {
             const id = document.getElementById('editId').value;
             const roles = Array.from(document.querySelectorAll('input[name="roles"]:checked')).map(cb => cb.value);
             const data = {
                 name: document.getElementById('mName').value,
-                role: roles.length > 0 ? roles : ["MEMBER"],
+                role: roles.length > 0 ? roles : ["GHETTOTROPHY"],
                 image: document.getElementById('mImg').value || 'https://via.placeholder.com/150',
                 facebook: document.getElementById('mFB').value || '#'
             };
+            if(!data.name) return alert("Please enter a name");
             id ? await db.ref('members/'+id).set(data) : await db.ref('members').push(data);
-            alert("Saved!"); resetForm();
+            alert("Success!"); resetForm();
         }
 
         function editMember(id) {
@@ -257,10 +251,22 @@
             document.getElementById('mImg').value = m.image;
             document.getElementById('mFB').value = m.facebook;
             document.getElementById('saveBtn').innerText = "UPDATE MEMBER";
+            
+            // Set checkboxes
+            const roles = Array.isArray(m.role) ? m.role : [m.role];
+            document.querySelectorAll('input[name="roles"]').forEach(cb => {
+                cb.checked = roles.includes(cb.value);
+            });
         }
 
-        async function deleteMember(id) { if(confirm("Delete?")) await db.ref('members/'+id).remove(); }
-        function resetForm() { document.querySelectorAll('input').forEach(i => i.value = ''); document.getElementById('saveBtn').innerText = "SAVE MEMBER"; }
+        async function deleteMember(id) { if(confirm("Delete this member?")) await db.ref('members/'+id).remove(); }
+        function resetForm() { 
+            document.getElementById('editId').value = '';
+            document.getElementById('mName').value = '';
+            document.getElementById('mImg').value = '';
+            document.getElementById('mFB').value = '';
+            document.getElementById('saveBtn').innerText = "SAVE MEMBER"; 
+        }
 
         renderCategories();
     </script>
