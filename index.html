@@ -32,10 +32,45 @@
             overflow-x: hidden;
         }
 
-        /* Smooth Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        /* --- UI Elements --- */
+        .member-count-badge {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 101;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .member-count-badge span { color: #fff; margin-left: 5px; }
+
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 101;
+            background: #fff;
+            color: #000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: var(--transition);
+        }
+        .music-control:hover { transform: scale(1.1); }
+        .music-control.playing i { animation: rotate 3s linear infinite; }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         .top-nav {
             padding: 20px 5%;
@@ -60,13 +95,20 @@
             text-align: center; padding: 160px 20px 80px; 
             background: radial-gradient(circle at 50% 50%, #111 0%, #050505 100%);
         }
-        .main-logo { width: 120px; height: auto; margin-bottom: 30px; filter: drop-shadow(0 0 30px rgba(255,255,255,0.1)); transition: 0.8s; }
+        
+        .main-logo { 
+            width: 120px;
+            height: auto; 
+            margin-bottom: 30px; 
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1)); 
+            transition: width 0.5s ease; 
+        }
+
         .hero-title { font-family: 'Orbitron'; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 12px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; background: linear-gradient(to bottom, #fff 30%, #555 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 6px; text-transform: uppercase; opacity: 0.7; }
 
         .container { max-width: 1300px; margin: 0 auto; width: 100%; padding: 0 40px; }
         
-        /* Search & Filter UI */
         .search-area { margin-bottom: 60px; animation: fadeIn 1s ease forwards; }
         .search-box { position: relative; max-width: 450px; margin: 0 auto 30px; }
         .search-box i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #444; }
@@ -85,7 +127,6 @@
         }
         .f-btn.active { background: #fff; color: #000; border-color: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
-        /* Grid UI */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding-bottom: 100px; }
         .member-card { 
             background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; 
@@ -97,7 +138,6 @@
         .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: grayscale(20%); transition: 0.5s; }
         .member-card:hover img { filter: grayscale(0%); transform: scale(1.1); }
 
-        /* Admin UI Modal */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(20px); animation: fadeIn 0.3s ease; }
         .admin-window { 
             background: #0d0d0d; width: 100%; max-width: 700px; max-height: 85vh; 
@@ -122,7 +162,6 @@
         }
         .btn-main:hover { transform: translateY(-2px); filter: brightness(0.9); }
 
-        /* Custom Notification UI */
         #customToast {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #fff; color: #000; padding: 20px 40px; border-radius: 50px;
@@ -135,6 +174,13 @@
     </style>
 </head>
 <body>
+
+    <div class="member-count-badge">MEMBERS <span id="countNum">0</span></div>
+
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">
+        <i class="fa-solid fa-compact-disc fa-lg"></i>
+    </div>
+    <audio id="bgMusic" loop></audio>
 
     <div id="customToast">ACTION SUCCESSFUL</div>
 
@@ -181,17 +227,13 @@
                 
                 <div style="background: #111; padding: 20px; border-radius: 18px; margin-bottom: 30px; border: 1px solid #1a1a1a;">
                     <h4 style="font-size: 0.7rem; color: #fff; margin-bottom: 15px; letter-spacing: 1px;"><i class="fa-solid fa-gears"></i> WEBSITE SETTINGS</h4>
+                    <div class="form-group"><label>Site Name</label><input type="text" id="confName"></div>
+                    <div class="form-group"><label>Site Logo URL</label><input type="text" id="confLogo"></div>
+                    <div class="form-group"><label>Logo Width (px)</label><input type="number" id="confLogoSize"></div>
+                    <div class="form-group"><label>Slogan / Subtitle</label><input type="text" id="confSub"></div>
                     <div class="form-group">
-                        <label>Site Name</label>
-                        <input type="text" id="confName" placeholder="Ex: GHETTOTROPHY">
-                    </div>
-                    <div class="form-group">
-                        <label>Site Logo URL</label>
-                        <input type="text" id="confLogo" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>Slogan / Subtitle</label>
-                        <input type="text" id="confSub" placeholder="Your gang slogan...">
+                        <label>Background Music URL (Direct Link)</label>
+                        <input type="text" id="confMusic" placeholder="https://example.com/music.mp3">
                     </div>
                     <button class="btn-main" onclick="saveConfig()" style="background: #222; color: #fff;">UPDATE WEBSITE</button>
                 </div>
@@ -214,7 +256,7 @@
     </div>
 
     <script>
-        // --- Firebase Config (Your Original URL) ---
+        // --- Firebase Config ---
         const firebaseConfig = { databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -223,9 +265,21 @@
         let siteConfig = {};
         let currentFilter = 'all';
         let isAdmin = false;
-        const defaultCats = ["GHETTOTROPHY"]; // เพิ่มหมวดหมู่พื้นฐานได้ที่นี่
+        const defaultCats = ["GHETTOTROPHY"];
 
-        // --- Core Functions ---
+        // --- Music Logic ---
+        const audio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                musicBtn.classList.add('playing');
+            } else {
+                audio.pause();
+                musicBtn.classList.remove('playing');
+            }
+        }
 
         function showToast(text) {
             const toast = document.getElementById('customToast');
@@ -245,23 +299,40 @@
 
         // --- Config Management ---
         db.ref('config').on('value', snap => {
-            siteConfig = snap.val() || { name: 'GHETTOTROPHY', logo: '', subtitle: 'Not a perfect gang but try to be the best.' };
+            const data = snap.val() || {};
+            siteConfig = {
+                name: data.name || 'GHETTOTROPHY',
+                logo: data.logo || '',
+                logoSize: data.logoSize || '120',
+                subtitle: data.subtitle || 'Not a perfect gang but try to be the best.',
+                music: data.music || ''
+            };
+
+            // Update UI
             document.getElementById('siteNameDisplay').innerText = siteConfig.name;
             document.getElementById('pageTitle').innerText = siteConfig.name;
             document.getElementById('siteSubDisplay').innerText = siteConfig.subtitle;
-            document.getElementById('siteLogo').src = siteConfig.logo;
+            document.getElementById('bgMusic').src = siteConfig.music;
             
-            // Fill inputs in admin
+            const logoImg = document.getElementById('siteLogo');
+            logoImg.src = siteConfig.logo;
+            logoImg.style.width = siteConfig.logoSize + 'px';
+
+            // Fill Admin Inputs
             document.getElementById('confName').value = siteConfig.name;
             document.getElementById('confLogo').value = siteConfig.logo;
+            document.getElementById('confLogoSize').value = siteConfig.logoSize;
             document.getElementById('confSub').value = siteConfig.subtitle;
+            document.getElementById('confMusic').value = siteConfig.music;
         });
 
         async function saveConfig() {
             const data = {
                 name: document.getElementById('confName').value,
                 logo: document.getElementById('confLogo').value,
-                subtitle: document.getElementById('confSub').value
+                logoSize: document.getElementById('confLogoSize').value,
+                subtitle: document.getElementById('confSub').value,
+                music: document.getElementById('confMusic').value
             };
             await db.ref('config').set(data);
             showToast("WEBSITE UPDATED");
@@ -281,7 +352,7 @@
             let checkHtml = '';
             defaultCats.forEach(name => {
                 filterHtml += `<button class="f-btn" data-role="${name}" onclick="setFilter('${name}')">${name}</button>`;
-                checkHtml += `<label><input type="checkbox" name="roles" value="${name}"> ${name}</label>`;
+                checkHtml += `<label style="font-size:0.6rem; display:flex; align-items:center; gap:5px;"><input type="checkbox" name="roles" value="${name}"> ${name}</label>`;
             });
             document.getElementById('filterArea').innerHTML = filterHtml;
             document.getElementById('mRoleCheckboxes').innerHTML = checkHtml;
@@ -291,14 +362,17 @@
             allMembers = [];
             const data = snap.val();
             let adminList = '';
+            let count = 0;
             for(let id in data) {
                 const m = {...data[id], id};
                 allMembers.push(m);
+                count++;
                 adminList += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:0.75rem; background: #000; padding: 12px 18px; border-radius: 12px; border: 1px solid #1a1a1a;">
                     <span>${m.name}</span>
                     <span style="display:flex; gap:15px; opacity:0.6;"><i class="fa-solid fa-pen" style="cursor:pointer;" onclick="editMember('${id}')"></i> <i class="fa-solid fa-trash" style="cursor:pointer; color:#ff4444;" onclick="deleteMember('${id}')"></i></span>
                 </div>`;
             }
+            document.getElementById('countNum').innerText = count;
             document.getElementById('adminMemberList').innerHTML = adminList;
             renderMembers();
         });
