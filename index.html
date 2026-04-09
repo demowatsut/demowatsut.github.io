@@ -66,6 +66,10 @@
         .music-ctrl { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: var(--accent); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; transition: var(--transition); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         .music-ctrl:hover { transform: rotate(15deg) scale(1.1); }
         #yt-player-container { position: absolute; width: 0; height: 0; pointer-events: none; opacity: 0; }
+
+        .delete-btn { color: #ff4444; cursor: pointer; transition: 0.3s; }
+        .delete-btn:hover { transform: scale(1.2); }
+        .edit-btn { color: #44aaff; cursor: pointer; margin-right: 10px; transition: 0.3s; }
     </style>
 </head>
 <body>
@@ -130,14 +134,19 @@
             </div>
 
             <div class="admin-card">
-                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-image"></i> IMAGE UTILS</h3>
-                <label>IMAGE URL TO COPY</label>
-                <input type="text" id="utilImageUrl" placeholder="วางลิงก์รูปภาพที่นี่...">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <button class="btn-save" style="background:#fff; color:#000;" onclick="copyImageToClipboard()">COPY IMAGE</button>
-                    <button class="btn-save" style="background:#333; color:#fff;" onclick="copyLinkToClipboard()">COPY LINK</button>
+                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-link"></i> LINK & IMAGE UTILS</h3>
+                <label>LINK NAME (สำหรับบันทึก)</label>
+                <input type="text" id="utilLinkName" placeholder="เช่น โลโก้แก๊ง, รูปพื้นหลัง...">
+                <label>URL</label>
+                <input type="text" id="utilImageUrl" placeholder="วางลิงก์ที่นี่...">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                    <button class="btn-save" style="background:var(--accent); color:#000;" onclick="saveLink()">SAVE LINK</button>
+                    <button class="btn-save" style="background:#fff; color:#000;" onclick="copyLinkToClipboard()">COPY LINK</button>
                 </div>
-                <p style="font-size:9px; opacity:0.5; margin-top:10px;">* ใช้สำหรับคัดลอกรูปหรือลิงก์ไปใช้งานในการตั้งค่าต่างๆ</p>
+                
+                <div id="savedLinksContainer" style="max-height: 150px; overflow-y: auto; background: #000; padding: 10px; border-radius: 6px;">
+                    </div>
             </div>
 
             <div class="admin-card">
@@ -156,6 +165,28 @@
                 <button class="btn-save" style="background:#fff; color:#000;" onclick="addRole()">ADD ROLE</button>
                 <div id="roleListContainer" style="margin-top:15px;"></div>
             </div>
+
+            <div class="admin-card" style="grid-column: 1 / -1;">
+                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-users"></i> MEMBER MANAGEMENT</h3>
+                <div class="admin-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div>
+                        <label>NAME</label><input type="text" id="memName">
+                        <label>AVATAR URL</label><input type="text" id="memImg">
+                    </div>
+                    <div>
+                        <label>FACEBOOK URL</label><input type="text" id="memFb">
+                        <label>ASSIGN ROLE</label>
+                        <select id="memRole"></select>
+                    </div>
+                </div>
+                <input type="hidden" id="editMemId">
+                <button id="memBtn" class="btn-save" style="background:var(--accent);" onclick="saveMember()">ADD NEW MEMBER</button>
+                
+                <div style="margin-top: 20px;">
+                    <label>MANAGE EXISTING MEMBERS</label>
+                    <div id="adminMemberList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin-top: 10px;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -166,8 +197,9 @@
 
         let player;
         let musicData = { id: 'PAMYc_MkqkM', start: 40 };
-        let isMusicReady = false;
+        let currentRoles = {};
 
+        // --- YouTube Logic ---
         function onYouTubeIframeAPIReady() {
             db.ref('music').on('value', snap => {
                 const d = snap.val();
@@ -181,14 +213,12 @@
                             height: '0', width: '0',
                             videoId: musicData.id,
                             playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': musicData.id, 'start': parseInt(musicData.start) },
-                            events: { 'onReady': onPlayerReady }
+                            events: { 'onReady': (e) => {} }
                         });
                     }
                 }
             });
         }
-
-        function onPlayerReady(event) { isMusicReady = true; }
 
         function toggleMusic() {
             const icon = document.getElementById('musicIcon');
@@ -203,38 +233,39 @@
             }
         }
 
-        // --- เพิ่มใหม่: Image Utility Functions ---
-        async function copyImageToClipboard() {
+        // --- Link & Image Management ---
+        function saveLink() {
+            const name = document.getElementById('utilLinkName').value;
             const url = document.getElementById('utilImageUrl').value;
-            if(!url) return showNotify("PLEASE ENTER URL");
-            try {
-                const data = await fetch(url);
-                const blob = await data.blob();
-                await navigator.clipboard.write([
-                    new ClipboardItem({ [blob.type]: blob })
-                ]);
-                showNotify("IMAGE COPIED TO CLIPBOARD");
-            } catch (err) {
-                showNotify("FAILED TO COPY IMAGE");
-            }
-        }
-
-        function copyLinkToClipboard() {
-            const url = document.getElementById('utilImageUrl').value;
-            if(!url) return showNotify("PLEASE ENTER URL");
-            navigator.clipboard.writeText(url).then(() => {
-                showNotify("LINK COPIED");
+            if(!name || !url) return showNotify("ENTER NAME AND URL");
+            db.ref('saved_links').push({ name, url }).then(() => {
+                showNotify("LINK SAVED");
+                document.getElementById('utilLinkName').value = '';
+                document.getElementById('utilImageUrl').value = '';
             });
         }
 
-        function saveMusicConfig() {
-            let val = document.getElementById('configMusicId').value;
-            const start = document.getElementById('configMusicStart').value || 0;
-            if(val.includes('v=')) val = val.split('v=')[1].split('&')[0];
-            else if(val.includes('youtu.be/')) val = val.split('youtu.be/')[1].split('?')[0];
-            db.ref('music').set({ id: val, start: start }).then(() => showNotify("MUSIC UPDATED"));
+        function copyLinkToClipboard(urlParam) {
+            const url = urlParam || document.getElementById('utilImageUrl').value;
+            if(!url) return showNotify("NO URL TO COPY");
+            navigator.clipboard.writeText(url).then(() => showNotify("LINK COPIED"));
         }
 
+        db.ref('saved_links').on('value', snap => {
+            const links = snap.val() || {};
+            const container = document.getElementById('savedLinksContainer');
+            container.innerHTML = Object.keys(links).map(id => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px; border-bottom:1px solid #222; font-size:11px;">
+                    <span style="cursor:pointer; color:var(--accent)" onclick="document.getElementById('utilImageUrl').value='${links[id].url}'">${links[id].name}</span>
+                    <div>
+                        <i class="fa-solid fa-copy edit-btn" onclick="copyLinkToClipboard('${links[id].url}')"></i>
+                        <i class="fa-solid fa-trash delete-btn" onclick="db.ref('saved_links').child('${id}').remove()"></i>
+                    </div>
+                </div>
+            `).join('') || '<p style="font-size:10px; opacity:0.5; text-align:center;">NO SAVED LINKS</p>';
+        });
+
+        // --- Admin & Config ---
         function attemptLogin() {
             if(document.getElementById('loginUser').value === 'ghett' && document.getElementById('loginPass').value === 'ghett9871') {
                 showNotify("WELCOME ADMIN");
@@ -246,20 +277,10 @@
             }
         }
 
-        function loadAdminData() {
-            db.ref('config').once('value', snap => {
-                const d = snap.val() || {};
-                document.getElementById('configSiteName').value = d.name || '';
-                document.getElementById('configSiteDesc').value = d.desc || '';
-                document.getElementById('configThemeColor').value = d.themeColor || '#ffc107';
-                document.getElementById('configLogoUrl').value = d.logo || '';
-            });
-        }
-
         function saveConfig() {
             const data = {
                 name: document.getElementById('configSiteName').value,
-                desc: document.getElementById('configSiteDesc').value,
+                desc: document.getElementById('configSiteDescDisplay').innerText = document.getElementById('configSiteDesc').value,
                 themeColor: document.getElementById('configThemeColor').value,
                 logo: document.getElementById('configLogoUrl').value
             };
@@ -274,6 +295,120 @@
             if(d.themeColor) document.documentElement.style.setProperty('--accent', d.themeColor);
         });
 
+        // --- Roles Logic ---
+        function addRole() {
+            const name = document.getElementById('newRoleName').value;
+            const color = document.getElementById('newRoleColor').value;
+            if(!name) return;
+            db.ref('roles').push({ name, color }).then(() => {
+                document.getElementById('newRoleName').value = '';
+                showNotify("ROLE ADDED");
+            });
+        }
+
+        db.ref('roles').on('value', snap => {
+            currentRoles = snap.val() || {};
+            const container = document.getElementById('roleListContainer');
+            const select = document.getElementById('memRole');
+            
+            let html = '';
+            let options = '<option value="">NO ROLE</option>';
+            
+            Object.keys(currentRoles).forEach(id => {
+                html += `
+                    <div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-bottom:5px; border-radius:4px; font-size:12px;">
+                        <span style="color:${currentRoles[id].color}">${currentRoles[id].name}</span>
+                        <i class="fa-solid fa-trash delete-btn" onclick="db.ref('roles').child('${id}').remove()"></i>
+                    </div>`;
+                options += `<option value="${id}">${currentRoles[id].name}</option>`;
+            });
+            container.innerHTML = html;
+            select.innerHTML = options;
+        });
+
+        // --- Member Logic ---
+        function saveMember() {
+            const id = document.getElementById('editMemId').value;
+            const data = {
+                name: document.getElementById('memName').value,
+                img: document.getElementById('memImg').value,
+                fb: document.getElementById('memFb').value,
+                roleId: document.getElementById('memRole').value
+            };
+            if(!data.name) return showNotify("NAME REQUIRED");
+
+            if(id) {
+                db.ref('members').child(id).update(data).then(() => {
+                    showNotify("MEMBER UPDATED");
+                    resetMemForm();
+                });
+            } else {
+                db.ref('members').push(data).then(() => {
+                    showNotify("MEMBER ADDED");
+                    resetMemForm();
+                });
+            }
+        }
+
+        function resetMemForm() {
+            document.getElementById('editMemId').value = '';
+            document.getElementById('memName').value = '';
+            document.getElementById('memImg').value = '';
+            document.getElementById('memFb').value = '';
+            document.getElementById('memRole').value = '';
+            document.getElementById('memBtn').innerText = 'ADD NEW MEMBER';
+            document.getElementById('memBtn').style.background = 'var(--accent)';
+        }
+
+        function editMember(id, data) {
+            document.getElementById('editMemId').value = id;
+            document.getElementById('memName').value = data.name;
+            document.getElementById('memImg').value = data.img;
+            document.getElementById('memFb').value = data.fb;
+            document.getElementById('memRole').value = data.roleId || '';
+            document.getElementById('memBtn').innerText = 'UPDATE MEMBER';
+            document.getElementById('memBtn').style.background = '#44aaff';
+            showNotify("EDIT MODE ACTIVE");
+        }
+
+        db.ref('members').on('value', snap => {
+            const members = snap.val() || {};
+            const list = document.getElementById('memberList');
+            const adminList = document.getElementById('adminMemberList');
+            const count = Object.keys(members).length;
+            document.getElementById('countNum').innerText = count;
+
+            let mainHtml = '';
+            let adminHtml = '';
+
+            Object.keys(members).forEach(id => {
+                const m = members[id];
+                const role = currentRoles[m.roleId] || { name: 'NO ROLE', color: '#555' };
+                
+                mainHtml += `
+                    <div class="member-card">
+                        <img src="${m.img || 'https://i.imgur.com/6VBx3io.png'}" class="avatar">
+                        <div>
+                            <div style="font-weight:600; font-size:15px; margin-bottom:4px;">${m.name}</div>
+                            <span class="rank-tag" style="background:${role.color}">${role.name}</span>
+                        </div>
+                        <a href="${m.fb}" target="_blank" class="fb-link"><i class="fa-brands fa-facebook"></i></a>
+                    </div>`;
+
+                adminHtml += `
+                    <div style="background:#000; padding:10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:12px;">${m.name}</span>
+                        <div>
+                            <i class="fa-solid fa-pen-to-square edit-btn" onclick='editMember("${id}", ${JSON.stringify(m)})'></i>
+                            <i class="fa-solid fa-trash delete-btn" onclick="db.ref('members').child('${id}').remove()"></i>
+                        </div>
+                    </div>`;
+            });
+            list.innerHTML = mainHtml;
+            adminList.innerHTML = adminHtml;
+        });
+
+        // --- Helpers ---
         function showNotify(msg) {
             const container = document.getElementById('notification-container');
             const toast = document.createElement('div');
@@ -282,28 +417,15 @@
             container.appendChild(toast);
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
-        
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function logoutAdmin() { location.reload(); }
-
         function customAlert(title, msg) {
             document.getElementById('alertTitle').innerText = title;
             document.getElementById('alertMsg').innerText = msg;
             openModal('customAlert');
             document.getElementById('alertConfirmBtn').onclick = () => closeModal('customAlert');
         }
-
-        db.ref('roles').on('value', snap => {
-            const roles = snap.val() || {};
-            const container = document.getElementById('roleListContainer');
-            container.innerHTML = Object.keys(roles).map(id => `
-                <div style="display:flex; justify-content:space-between; padding:8px; background:#000; margin-bottom:5px; border-radius:4px; font-size:12px;">
-                    <span style="color:${roles[id].color}">${roles[id].name}</span>
-                    <i class="fa-solid fa-trash" onclick="db.ref('roles').child('${id}').remove()"></i>
-                </div>
-            `).join('');
-        });
     </script>
 </body>
 </html>
