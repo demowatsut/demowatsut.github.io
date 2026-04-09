@@ -19,7 +19,6 @@
             --card-bg: #111111;
             --input-bg: #1a1c1e;
             --border: rgba(255, 255, 255, 0.05);
-            /* Smooth Transition Logic */
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -27,99 +26,43 @@
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg); color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; line-height: 1.6; }
 
-        /* --- Animations --- */
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Notification (Chrome Style) --- */
+        /* --- Notification --- */
         #notification-container { position: fixed; bottom: 30px; left: 30px; z-index: 10000; }
-        .notify { 
-            background: #202124; 
-            border-radius: 4px; 
-            padding: 12px 24px; 
-            color: #fff; 
-            font-size: 14px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: flex; align-items: center; gap: 12px;
-            margin-top: 10px;
-            animation: slideUp 0.3s ease-out;
-            min-width: 250px;
-        }
+        .notify { background: #202124; border-radius: 4px; padding: 12px 24px; color: #fff; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; margin-top: 10px; animation: slideUp 0.3s ease-out; min-width: 250px; }
 
         /* --- Navigation --- */
         .top-nav { position: fixed; top: 0; width: 100%; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(10,10,10,0.7); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); }
         .config-btn { background: var(--accent); color: #000; border: none; padding: 8px 18px; border-radius: 6px; font-family: 'Orbitron'; cursor: pointer; transition: var(--transition); font-size: 11px; font-weight: bold; }
         .config-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent); }
 
-        /* --- Hero Section --- */
+        /* --- Hero --- */
         .hero { padding: 160px 20px 60px; text-align: center; animation: slideUp 0.8s ease; }
         .hero img { max-width: 140px; margin-bottom: 25px; filter: drop-shadow(0 0 20px var(--accent)); transition: var(--transition); }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(28px, 6vw, 60px); letter-spacing: 12px; margin-bottom: 10px; color: var(--accent); text-shadow: 0 0 30px rgba(255,193,7,0.3); }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(28px, 6vw, 60px); letter-spacing: 12px; margin-bottom: 10px; color: var(--accent); }
 
-        /* --- Member Grid --- */
-        .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
-        .member-card { 
-            background: var(--card-bg); 
-            border: 1px solid var(--border); 
-            border-radius: 12px; 
-            padding: 15px; 
-            display: flex; align-items: center; gap: 15px; 
-            transition: var(--transition);
-        }
-        .member-card:hover { border-color: var(--accent); transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .avatar { width: 55px; height: 55px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
-        .fb-link { margin-left: auto; color: #1877f2; font-size: 22px; transition: 0.3s; opacity: 0.7; }
-        .fb-link:hover { opacity: 1; transform: rotate(15deg); }
+        /* --- Member Grid & Role Badges --- */
+        .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
+        .member-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; transition: var(--transition); }
+        .member-card:hover { border-color: var(--accent); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .avatar { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+        .role-badge { font-family: 'Orbitron'; font-size: 9px; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- Custom Login Modal --- */
-        .modal-overlay { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); 
-            display: none; align-items: center; justify-content: center; 
-            z-index: 5000; backdrop-filter: blur(8px);
-        }
-        .login-card { 
-            background: #1a1c1e; padding: 40px; border-radius: 16px; 
-            width: 100%; max-width: 400px; border: 1px solid var(--border);
-            text-align: center; animation: slideUp 0.4s cubic-bezier(0.17, 0.84, 0.44, 1);
-        }
-        .login-card h2 { font-family: 'Orbitron'; margin-bottom: 30px; font-size: 18px; color: var(--accent); }
-        .login-card input { 
-            width: 100%; padding: 12px 15px; background: #0a0a0a; border: 1px solid #333; 
-            color: #fff; border-radius: 8px; margin-bottom: 15px; outline: none; transition: 0.3s;
-        }
-        .login-card input:focus { border-color: var(--accent); background: #111; }
-        .login-card .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-chrome { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Orbitron'; }
-        .btn-primary { background: var(--accent); color: #000; }
-        .btn-secondary { background: #333; color: #fff; }
-        .btn-chrome:hover { opacity: 0.9; transform: translateY(-2px); }
-
-        /* --- Admin Panel --- */
-        .admin-panel { 
-            display: none; position: fixed; inset: 0; background: #0a0a0a; 
-            z-index: 6000; overflow-y: auto; padding: 40px; animation: slideUp 0.5s ease;
-        }
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .admin-card { background: #141414; padding: 30px; border-radius: 15px; border: 1px solid #222; }
-        label { display: block; font-size: 11px; color: var(--accent); margin-bottom: 8px; font-family: 'Orbitron'; opacity: 0.8; }
+        /* --- Login Modal --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 5000; backdrop-filter: blur(8px); }
+        .login-card { background: #1a1c1e; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; animation: slideUp 0.4s ease; }
+        .login-card input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 15px; outline: none; }
         
-        /* --- Music Control --- */
-        .music-ctrl { 
-            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; 
-            background: var(--accent); color: #000; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: var(--transition);
-        }
-        .music-ctrl:hover { transform: scale(1.1) rotate(15deg); }
+        /* --- Admin Panel --- */
+        .admin-panel { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 6000; overflow-y: auto; padding: 40px; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; max-width: 1400px; margin: 0 auto; }
+        .admin-card { background: #141414; padding: 25px; border-radius: 15px; border: 1px solid #222; margin-bottom: 20px;}
+        input, select { width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 6px; margin-bottom: 12px; font-family: 'Inter'; }
+        label { display: block; font-size: 10px; color: var(--accent); margin-bottom: 5px; font-family: 'Orbitron'; }
+        .btn-save { width: 100%; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; font-weight: bold; margin-bottom: 10px; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        .music-ctrl { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--accent); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; transition: var(--transition); }
     </style>
 </head>
 <body>
@@ -128,13 +71,11 @@
 
     <div id="loginModal" class="modal-overlay">
         <div class="login-card">
-            <h2>ADMIN AUTHENTICATION</h2>
-            <input type="text" id="loginUser" placeholder="Username" autocomplete="off">
+            <h2 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px;">ADMIN LOGIN</h2>
+            <input type="text" id="loginUser" placeholder="Username">
             <input type="password" id="loginPass" placeholder="Password">
-            <div class="btn-group">
-                <button class="btn-chrome btn-secondary" onclick="closeLoginModal()">CANCEL</button>
-                <button class="btn-chrome btn-primary" onclick="attemptLogin()">LOGIN</button>
-            </div>
+            <button class="config-btn" style="width:100%; padding:12px;" onclick="attemptLogin()">ENTER SYSTEM</button>
+            <p onclick="closeLoginModal()" style="font-size:12px; margin-top:15px; cursor:pointer; opacity:0.5;">CANCEL</p>
         </div>
     </div>
 
@@ -146,9 +87,9 @@
     </nav>
 
     <header class="hero">
-        <img src="" id="siteLogo" alt="Logo" onerror="this.style.display='none'">
+        <img src="" id="siteLogo" alt="Logo">
         <h1 id="siteNameDisplay">GHETTOTROPHY</h1>
-        <p id="siteDescDisplay" style="font-family: 'Orbitron'; font-size: 10px; opacity: 0.5; letter-spacing: 5px;">ADMIN CONTROL SYSTEM</p>
+        <p id="siteDescDisplay" style="font-family:'Orbitron'; font-size:10px; opacity:0.5; letter-spacing:5px;">MEMBER ROLE SYSTEM</p>
     </header>
 
     <div id="memberList" class="member-grid"></div>
@@ -159,42 +100,47 @@
     <audio id="bgMusic" loop></audio>
 
     <div id="adminPanel" class="admin-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 40px;">
-            <h2 style="font-family: 'Orbitron'; color: var(--accent);">CORE DASHBOARD</h2>
-            <button class="config-btn" style="background:#ff4444; color:#fff;" onclick="logoutAdmin()">LOGOUT</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto 30px;">
+            <h2 style="font-family: 'Orbitron'; color: var(--accent);">ADMIN DASHBOARD</h2>
+            <button class="config-btn" style="background:#ff4444; color:#fff;" onclick="logoutAdmin()">CLOSE PANEL</button>
         </div>
 
         <div class="admin-grid">
             <div class="admin-card">
-                <h3 style="margin-bottom:20px; font-family: 'Orbitron'; font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 10px;">SITE DESIGN</h3>
-                <label>SITE NAME</label>
-                <input type="text" id="editSiteName">
-                <label>SITE DESCRIPTION</label>
-                <input type="text" id="editSiteDesc">
-                <label>LOGO URL</label>
-                <input type="text" id="editLogoUrl">
-                <label>FAVICON URL</label>
-                <input type="text" id="editFavicon">
-                <label>THEME ACCENT</label>
-                <input type="color" id="editThemeColor" style="height: 50px; cursor: pointer;">
-                <label>MUSIC URL (.mp3)</label>
-                <input type="text" id="editMusicUrl">
-                <button class="btn-save" style="width:100%" onclick="saveConfig()">SAVE CHANGES</button>
+                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-gears"></i> SITE CONFIG</h3>
+                <label>SITE NAME</label><input type="text" id="editSiteName">
+                <label>DESCRIPTION</label><input type="text" id="editSiteDesc">
+                <label>THEME COLOR</label><input type="color" id="editThemeColor" style="height:40px;">
+                <label>LOGO URL</label><input type="text" id="editLogoUrl">
+                <button class="btn-save" style="background:var(--accent);" onclick="saveConfig()">UPDATE SITE</button>
             </div>
 
             <div class="admin-card">
-                <h3 style="margin-bottom:20px; font-family: 'Orbitron'; font-size: 14px; border-bottom: 1px solid #333; padding-bottom: 10px;">MEMBER MANAGEMENT</h3>
-                <div style="background: #000; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <label>NAME</label>
-                    <input type="text" id="newMemName">
-                    <label>IMAGE URL</label>
-                    <input type="text" id="newMemImg">
-                    <label>FB URL</label>
-                    <input type="text" id="newMemFB">
-                    <button class="btn-save" style="width: 100%; background:#fff; color:#000;" onclick="addMember()">+ ADD NEW MEMBER</button>
+                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-tags"></i> ROLE MANAGER</h3>
+                <div style="background:#000; padding:15px; border-radius:8px; margin-bottom:15px;">
+                    <label>NEW ROLE NAME</label><input type="text" id="newRoleName" placeholder="Admin, VIP, etc.">
+                    <label>ROLE COLOR</label><input type="color" id="newRoleColor" value="#ffc107" style="height:40px;">
+                    <button class="btn-save" style="background:#fff; color:#000;" onclick="addRole()">CREATE ROLE</button>
                 </div>
-                <div id="adminMemberList" style="max-height: 300px; overflow-y: auto; padding-right: 5px;"></div>
+                <div id="roleListContainer" style="max-height:150px; overflow-y:auto;"></div>
             </div>
+
+            <div class="admin-card">
+                <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px; color:var(--accent);"><i class="fa-solid fa-user-plus"></i> MEMBERS</h3>
+                <div style="background:#000; padding:15px; border-radius:8px;">
+                    <label>NAME</label><input type="text" id="newMemName">
+                    <label>IMAGE URL</label><input type="text" id="newMemImg">
+                    <label>FB URL</label><input type="text" id="newMemFB">
+                    <label>ASSIGN ROLE</label>
+                    <select id="newMemRole"><option value="">NO ROLE</option></select>
+                    <button class="btn-save" style="background:var(--accent); margin-top:10px;" onclick="addMember()">ADD MEMBER</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-card" style="max-width:1400px; margin: 0 auto;">
+            <h3 style="font-family:'Orbitron'; font-size:14px; margin-bottom:15px;">MANAGE EXISTING MEMBERS</h3>
+            <div id="adminMemberList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:10px;"></div>
         </div>
     </div>
 
@@ -205,52 +151,44 @@
         const db = firebase.database();
 
         let allMembers = [];
+        let allRoles = {};
         let siteConfig = {};
 
-        // --- Chrome Style Notify ---
         function showNotify(msg) {
             const container = document.getElementById('notification-container');
             const toast = document.createElement('div');
             toast.className = 'notify';
-            toast.innerHTML = `<i class="fa-solid fa-check" style="color:var(--accent)"></i> ${msg}`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--accent)"></i> ${msg}`;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
 
-        // --- Custom Auth Logic ---
         function showLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
-        
         function attemptLogin() {
-            const u = document.getElementById('loginUser').value;
-            const p = document.getElementById('loginPass').value;
-            if(u === 'ghett' && p === 'ghett9871') {
-                showNotify("AUTHENTICATED SUCCESSFULLY");
+            if(document.getElementById('loginUser').value === 'ghett' && document.getElementById('loginPass').value === 'ghett9871') {
+                showNotify("WELCOME ADMIN");
                 closeLoginModal();
                 document.getElementById('adminPanel').style.display = 'block';
-                document.body.style.overflow = 'hidden';
                 loadAdminData();
-            } else {
-                alert("INVALID CREDENTIALS");
-            }
+            } else { alert("WRONG PASSWORD"); }
         }
-
         function logoutAdmin() { location.reload(); }
 
-        // --- Data Handling ---
+        // --- Data Sync ---
         db.ref('config').on('value', snap => {
-            const d = snap.val() || {};
-            siteConfig = d;
+            const d = snap.val() || {}; siteConfig = d;
             document.getElementById('siteNameDisplay').innerText = d.name || 'GHETTOTROPHY';
-            document.getElementById('pageTitle').innerText = d.name || 'GHETTOTROPHY';
             document.getElementById('siteDescDisplay').innerText = d.desc || '';
             document.getElementById('siteLogo').src = d.logo || '';
-            document.getElementById('favicon').href = d.favicon || '';
-            document.getElementById('bgMusic').src = d.music || '';
             if(d.themeColor) document.documentElement.style.setProperty('--accent', d.themeColor);
+        });
+
+        db.ref('roles').on('value', snap => {
+            allRoles = snap.val() || {};
+            renderRoles();
+            updateRoleDropdown();
+            renderMembers(); // Re-render members to update role colors
         });
 
         db.ref('members').on('value', snap => {
@@ -262,81 +200,96 @@
             renderAdminMembers();
         });
 
+        // --- Rendering ---
         function renderMembers() {
             const list = document.getElementById('memberList');
-            list.innerHTML = allMembers.map(m => `
+            list.innerHTML = allMembers.map(m => {
+                const role = allRoles[m.roleId] || null;
+                return `
                 <div class="member-card">
                     <img src="${m.image || 'https://via.placeholder.com/150'}" class="avatar">
-                    <div class="m-info">
-                        <h3 style="font-family: 'Orbitron'; font-size: 13px; letter-spacing:1px;">${m.name}</h3>
+                    <div>
+                        <h3 style="font-family:'Orbitron'; font-size:13px;">${m.name}</h3>
+                        ${role ? `<span class="role-badge" style="background:${role.color}; color:#000;">${role.name}</span>` : ''}
                     </div>
                     ${m.facebook ? `<a href="${m.facebook}" target="_blank" class="fb-link"><i class="fa-brands fa-facebook"></i></a>` : ''}
+                </div>`;
+            }).join('');
+        }
+
+        function renderRoles() {
+            const container = document.getElementById('roleListContainer');
+            container.innerHTML = Object.keys(allRoles).map(id => `
+                <div style="display:flex; justify-content:space-between; background:#1a1a1a; padding:8px; margin-bottom:5px; border-radius:5px; font-size:12px;">
+                    <span style="color:${allRoles[id].color}"><i class="fa-solid fa-circle"></i> ${allRoles[id].name}</span>
+                    <i class="fa-solid fa-trash" style="color:#ff4444; cursor:pointer;" onclick="deleteRole('${id}')"></i>
                 </div>
             `).join('');
+        }
+
+        function updateRoleDropdown() {
+            const select = document.getElementById('newMemRole');
+            select.innerHTML = '<option value="">NO ROLE</option>' + 
+                Object.keys(allRoles).map(id => `<option value="${id}">${allRoles[id].name}</option>`).join('');
         }
 
         function renderAdminMembers() {
             const list = document.getElementById('adminMemberList');
             list.innerHTML = allMembers.map(m => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #222; font-size:13px;">
-                    <span>${m.name}</span>
-                    <button class="btn-delete" style="background:none; border:1px solid #444; color:#ff4444; cursor:pointer; padding:4px 8px; border-radius:4px;" onclick="deleteMember('${m.id}')">REMOVE</button>
+                <div style="background:#000; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px;">${m.name}</span>
+                    <button onclick="deleteMember('${m.id}')" style="background:none; border:1px solid #444; color:red; cursor:pointer; font-size:10px; padding:2px 5px;">DELETE</button>
                 </div>
             `).join('');
         }
 
-        // --- Admin Actions ---
-        function loadAdminData() {
-            document.getElementById('editSiteName').value = siteConfig.name || '';
-            document.getElementById('editSiteDesc').value = siteConfig.desc || '';
-            document.getElementById('editLogoUrl').value = siteConfig.logo || '';
-            document.getElementById('editFavicon').value = siteConfig.favicon || '';
-            document.getElementById('editThemeColor').value = siteConfig.themeColor || '#ffc107';
-            document.getElementById('editMusicUrl').value = siteConfig.music || '';
+        // --- Actions ---
+        function addRole() {
+            const name = document.getElementById('newRoleName').value;
+            const color = document.getElementById('newRoleColor').value;
+            if(!name) return alert("ENTER ROLE NAME");
+            db.ref('roles').push({ name, color }).then(() => {
+                showNotify("ROLE CREATED");
+                document.getElementById('newRoleName').value = '';
+            });
         }
 
-        function saveConfig() {
-            const updates = {
-                name: document.getElementById('editSiteName').value,
-                desc: document.getElementById('editSiteDesc').value,
-                logo: document.getElementById('editLogoUrl').value,
-                favicon: document.getElementById('editFavicon').value,
-                themeColor: document.getElementById('editThemeColor').value,
-                music: document.getElementById('editMusicUrl').value
-            };
-            db.ref('config').update(updates).then(() => showNotify("CONFIG SAVED"));
-        }
+        function deleteRole(id) { if(confirm("DELETE ROLE?")) db.ref('roles').child(id).remove(); }
 
         function addMember() {
             const name = document.getElementById('newMemName').value;
             const img = document.getElementById('newMemImg').value;
             const fb = document.getElementById('newMemFB').value;
+            const roleId = document.getElementById('newMemRole').value;
             if(!name) return alert("ENTER NAME");
-            db.ref('members').push({ name, image: img, facebook: fb }).then(() => {
+            db.ref('members').push({ name, image: img, facebook: fb, roleId }).then(() => {
                 showNotify("MEMBER ADDED");
-                document.getElementById('newMemName').value = '';
-                document.getElementById('newMemImg').value = '';
-                document.getElementById('newMemFB').value = '';
+                ['newMemName','newMemImg','newMemFB'].forEach(id => document.getElementById(id).value = '');
             });
         }
 
-        function deleteMember(id) {
-            if(confirm('DELETE THIS MEMBER?')) {
-                db.ref('members').child(id).remove().then(() => showNotify("MEMBER DELETED"));
-            }
+        function deleteMember(id) { if(confirm("DELETE MEMBER?")) db.ref('members').child(id).remove().then(() => showNotify("MEMBER DELETED")); }
+
+        function saveConfig() {
+            db.ref('config').update({
+                name: document.getElementById('editSiteName').value,
+                desc: document.getElementById('editSiteDesc').value,
+                themeColor: document.getElementById('editThemeColor').value,
+                logo: document.getElementById('editLogoUrl').value
+            }).then(() => showNotify("SITE UPDATED"));
+        }
+
+        function loadAdminData() {
+            document.getElementById('editSiteName').value = siteConfig.name || '';
+            document.getElementById('editSiteDesc').value = siteConfig.desc || '';
+            document.getElementById('editThemeColor').value = siteConfig.themeColor || '#ffc107';
+            document.getElementById('editLogoUrl').value = siteConfig.logo || '';
         }
 
         function toggleMusic() {
             const a = document.getElementById('bgMusic'), i = document.getElementById('musicIcon');
-            if(a.paused) { 
-                a.play().then(() => {
-                    i.className = 'fa-solid fa-pause';
-                    showNotify("MUSIC ON");
-                }).catch(() => alert("URL เพลงไม่ถูกต้องหรือยังไม่ได้ตั้งค่า"));
-            } else { 
-                a.pause(); 
-                i.className = 'fa-solid fa-play'; 
-            }
+            if(a.paused) { a.play().then(() => { i.className = 'fa-solid fa-pause'; showNotify("MUSIC ON"); }).catch(() => alert("SET MUSIC URL FIRST")); }
+            else { a.pause(); i.className = 'fa-solid fa-play'; }
         }
     </script>
 </body>
