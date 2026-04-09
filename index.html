@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WELLESLEY DATABASE</title>
+    <title>DEMOWATSUT</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Bai+Jamjuree:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,7 +31,6 @@
             min-height: 100vh;
         }
 
-        /* --- Custom Scrollbar --- */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; }
@@ -46,6 +45,21 @@
             border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 100;
         }
+
+        /* จำนวนสมาชิกซ้ายบน */
+        .member-counter-top {
+            font-family: 'Orbitron';
+            font-size: 1.1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 15px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+        }
+
         .logo-text { font-family: 'Orbitron'; font-weight: 700; letter-spacing: 3px; font-size: 1.2rem; }
         .nav-btns { display: flex; gap: 20px; }
         .nav-btn { color: #888; text-decoration: none; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
@@ -54,7 +68,7 @@
         .hero-section { text-align: center; padding: 60px 20px; }
         .main-logo { width: 120px; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
         .hero-title { font-family: 'Orbitron'; font-size: 2.5rem; letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 0 20px var(--accent-glow); }
-        .hero-subtitle { font-size: 0.7rem; color: #666; letter-spacing: 4px; margin-top: 10px; }
+        .hero-subtitle { font-size: 0.7rem; color: #666; letter-spacing: 4px; margin-top: 10px; font-family: 'Orbitron'; }
 
         /* --- Search & Filters --- */
         .search-container { max-width: 600px; margin: 0 auto 40px; padding: 0 20px; }
@@ -69,17 +83,16 @@
         .f-btn {
             background: #111; border: 1px solid #222; color: #666;
             padding: 6px 20px; border-radius: 100px; cursor: pointer; font-size: 0.75rem; transition: 0.3s;
+            font-family: 'Orbitron';
         }
         .f-btn.active { background: #ffc107; color: #000; border-color: #ffc107; }
 
         /* --- Member Grid --- */
-        .member-count { text-align: center; margin-bottom: 20px; font-size: 1.2rem; font-family: 'Orbitron'; }
         .grid-container {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px; padding: 0 5% 100px; max-width: 1200px; margin: 0 auto;
         }
 
-        /* Member Card (Wellesley Style) */
         .member-card {
             background: #111; border: 1px solid #222; border-radius: 15px;
             padding: 15px; display: flex; align-items: center; gap: 20px;
@@ -95,7 +108,7 @@
         .role-badge { background: #222; color: #aaa; padding: 2px 12px; border-radius: 5px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
         .fb-link { color: #0084ff; text-decoration: none; font-size: 0.8rem; }
 
-        /* --- Admin UI (Oneless Style) --- */
+        /* --- Admin UI --- */
         .modal {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px);
@@ -138,7 +151,12 @@
 <body>
 
     <nav class="top-nav">
-        <div class="logo-text">WELLESLEY</div>
+        <div class="member-counter-top">
+            <i class="fa-solid fa-user-group"></i> <span id="countNumber">0</span>
+        </div>
+        
+        <div class="logo-text">DEMOWATSUT</div>
+        
         <div class="nav-btns">
             <a class="nav-btn" onclick="location.reload()"><i class="fa-solid fa-users"></i> Members</a>
             <a class="nav-btn" onclick="openAdmin()"><i class="fa-solid fa-shield-halved"></i> Admin</a>
@@ -147,22 +165,18 @@
 
     <header class="hero-section">
         <img src="https://img5.pic.in.th/file/secure-sv1/Untitled-17361494911.png" alt="Logo" class="main-logo">
-        <h1 class="hero-title">WELLESLEY</h1>
-        <p class="hero-subtitle">SINCE 2024</p>
+        <h1 class="hero-title">DEMOWATSUT</h1>
+        <p class="hero-subtitle">STAND FOR WINTERFELL DEMO</p>
     </header>
 
     <div class="search-container">
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Search members..." onkeyup="renderMembers()">
         </div>
-        <div class="filter-group" id="filterArea">
-            </div>
+        <div class="filter-group" id="filterArea"></div>
     </div>
 
-    <div class="member-count"><i class="fa-solid fa-user-group"></i> MEMBERS (<span id="countNumber">0</span>)</div>
-    
-    <div class="grid-container" id="memberList">
-        </div>
+    <div class="grid-container" id="memberList"></div>
 
     <div id="loginModal" class="modal">
         <div class="admin-window" style="max-width: 400px;">
@@ -187,7 +201,7 @@
                     <div class="form-grid">
                         <div class="input-group">
                             <label>Display Name</label>
-                            <input type="text" id="mName" placeholder="เช่น Ahfei Wellesley">
+                            <input type="text" id="mName" placeholder="เช่น Ahfei">
                         </div>
                         <div class="input-group">
                             <label>Category / Role</label>
@@ -211,7 +225,7 @@
                 </div>
                 
                 <div class="manage-list">
-                    <h4 style="font-family:'Orbitron'; font-size: 0.8rem; color:#666; margin-bottom: 15px;">ADD CATEGORY</h4>
+                    <h4 style="font-family:'Orbitron'; font-size: 0.8rem; color:#666; margin-bottom: 15px;">SYSTEM CATEGORIES</h4>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="newCat" placeholder="Unit Name">
                         <button onclick="addCategory()" style="background:#222; color:#fff; border:none; padding: 0 20px; border-radius: 8px; cursor: pointer;">ADD</button>
@@ -223,7 +237,6 @@
     </div>
 
     <script>
-        // --- Firebase Config (ใช้ของคุณเดิม) ---
         const firebaseConfig = { databaseURL: "https://demoadmin-a4b1f-default-rtdb.asia-southeast1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -232,7 +245,8 @@
         let currentFilter = 'all';
         let isAdmin = false;
 
-        // --- Functions ---
+        const defaultCats = ["DEMOWATSUT", "DEMO", "WINTERFELL DEMO", "DOKKADON"];
+
         function openAdmin() {
             isAdmin ? document.getElementById('adminPanel').style.display='flex' : document.getElementById('loginModal').style.display='flex';
         }
@@ -251,18 +265,30 @@
             }
         }
 
-        // --- Real-time Data ---
         db.ref('categories').on('value', snap => {
             const data = snap.val();
             let html = `<button class="f-btn active" onclick="setFilter('all', this)">All</button>`;
             let selectHtml = '';
             let adminCatHtml = '';
-            for(let id in data) {
-                const name = data[id].name;
+            
+            let catNames = [...defaultCats];
+            if(data) {
+                for(let id in data) {
+                    if(!catNames.includes(data[id].name)) catNames.push(data[id].name);
+                }
+            }
+
+            catNames.forEach(name => {
                 html += `<button class="f-btn" onclick="setFilter('${name}', this)">${name}</button>`;
                 selectHtml += `<option value="${name}">${name}</option>`;
-                adminCatHtml += `<div class="admin-item" style="padding:5px 15px; font-size:0.8rem;">${name} <i class="fa-solid fa-trash" onclick="deleteCat('${id}')"></i></div>`;
+            });
+
+            if(data) {
+                for(let id in data) {
+                    adminCatHtml += `<div class="admin-item" style="padding:5px 15px; font-size:0.8rem;">${data[id].name} <i class="fa-solid fa-trash" onclick="deleteCat('${id}')"></i></div>`;
+                }
             }
+
             document.getElementById('filterArea').innerHTML = html;
             document.getElementById('mRoleSelect').innerHTML = selectHtml;
             document.getElementById('adminCatList').innerHTML = adminCatHtml;
@@ -291,7 +317,6 @@
             renderMembers();
         });
 
-        // --- Actions ---
         async function saveMember() {
             const id = document.getElementById('editId').value;
             const data = {
@@ -301,10 +326,8 @@
                 facebook: document.getElementById('mFB').value || '#'
             };
             if(!data.name) return alert("Please enter name");
-
             if(id) await db.ref('members/'+id).set(data);
             else await db.ref('members').push(data);
-
             resetForm();
             alert("Success!");
         }
@@ -322,7 +345,7 @@
         async function deleteMember(id) { if(confirm("Delete this member?")) await db.ref('members/'+id).remove(); }
         async function deleteCat(id) { if(confirm("Delete this category?")) await db.ref('categories/'+id).remove(); }
         async function addCategory() {
-            const name = document.getElementById('newCat').value;
+            const name = document.getElementById('newCat').value.toUpperCase();
             if(name) await db.ref('categories').push({ name });
             document.getElementById('newCat').value = '';
         }
@@ -346,7 +369,9 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             const filtered = allMembers.filter(m => (currentFilter==='all' || m.role===currentFilter) && m.name.toLowerCase().includes(search));
             
+            // อัปเดตตัวเลขที่ซ้ายบน
             document.getElementById('countNumber').innerText = filtered.length;
+            
             document.getElementById('memberList').innerHTML = filtered.map(m => `
                 <div class="member-card">
                     <div class="avatar-box">
