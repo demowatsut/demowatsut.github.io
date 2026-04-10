@@ -118,9 +118,9 @@
 
     <nav class="top-nav">
         <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:2px;">
-            <i class="fa-solid fa-users" style="color:var(--accent)"></i> TOTAL PERSONNEL: <span id="countNum">0</span>
+            <i class="fa-solid fa-users" style="color:var(--accent)"></i> MEMBER: <span id="countNum">0</span>
         </div>
-        <button class="config-btn" onclick="openModal('loginModal')"><i class="fa-solid fa-lock"></i> ADMIN PANEL</button>
+        <button class="config-btn" onclick="openModal('loginModal')"><i class="fa-solid fa-lock"></i> ADMIN</button>
     </nav>
 
     <header class="hero">
@@ -148,12 +148,12 @@
                     <h2 style="font-family:'Orbitron'; color:var(--accent); font-size:24px;">CENTRAL COMMAND</h2>
                     <p style="font-size:12px; color:#555;">Real-time Database & Site Management</p>
                 </div>
-                <button class="config-btn" style="background:var(--danger); color:#fff;" onclick="closeAdminPanel()">EXIT SYSTEM</button>
+                <button class="config-btn" style="background:var(--danger); color:#fff;" onclick="closeAdminPanel()">CLOSE</button>
             </header>
 
             <div class="admin-grid">
                 <div class="admin-card col-4">
-                    <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent); border-bottom:1px solid #333; padding-bottom:10px;">GLOBAL CONFIG</div>
+                    <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent); border-bottom:1px solid #333; padding-bottom:10px;">SETTING - WEBSITE</div>
                     <label>SITE NAME</label><input type="text" id="configSiteName">
                     <label>FAVICON URL</label><input type="text" id="configFavicon">
                     <label>THEME ACCENT</label><input type="color" id="configThemeColor" style="height:50px; cursor:pointer;">
@@ -172,7 +172,7 @@
 
                 <div class="col-8" style="display:flex; flex-direction:column; gap:24px;">
                     <div class="admin-card">
-                        <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent);">CATEGORY GROUPS</div>
+                        <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent);">ROLE GROUPS</div>
                         <div style="display:flex; gap:15px;">
                             <input type="text" id="newGroupName" placeholder="NEW GROUP (e.g. HIGH COMMAND)" style="margin-bottom:0;">
                             <button class="config-btn" onclick="addGroup()">ADD</button>
@@ -192,7 +192,7 @@
                     </div>
 
                     <div class="admin-card">
-                        <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent);">AUDIO ENGINE</div>
+                        <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent);">AUDIO MUSIC</div>
                         <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
                             <label class="switch"><input type="checkbox" id="musicAutoToggle"><span class="slider"></span></label>
                             <span style="font-size:11px; font-family:'Orbitron';">AUTO-START ON LOAD</span>
@@ -206,7 +206,7 @@
                 </div>
 
                 <div class="admin-card col-12">
-                    <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent); border-bottom:1px solid #333; padding-bottom:10px;">PERSONNEL REGISTRY</div>
+                    <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent); border-bottom:1px solid #333; padding-bottom:10px;">ADMIN SETTING - ต้องเลือก Role และใส่ Link Facebook</div>
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
                         <div><label>FULL NAME</label><input type="text" id="memName"></div>
                         <div><label>AVATAR URL</label><input type="text" id="memImg"></div>
