@@ -389,7 +389,7 @@
                 const role = currentRoles[m.roleId];
                 if(!role) return;
                 const gId = role.groupId;
-                const gName = currentGroups[gId]?.name || "UNASSIGNED";
+                const gName = currentGroups[gId]?.name || "MEMBER GHETT 2K26";
                 if(m.name.toLowerCase().includes(term) && (activeTab === 'all' || m.roleId === activeTab)) {
                     if(!structure[gId]) structure[gId] = { name: gName, items: [] };
                     structure[gId].items.push({...m, role});
