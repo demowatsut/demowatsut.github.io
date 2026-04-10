@@ -372,6 +372,20 @@
         }
 
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        <div class="admin-card">
+    <div style="margin-bottom:20px; font-family:'Orbitron'; font-size:14px; color:var(--accent); display:flex; justify-content:space-between; align-items:center;">
+        <span><i class="fa-solid fa-music"></i> AUDIO CONTROL</span>
+        <label class="switch-container" style="margin-bottom:0;">
+            <span id="musicStatusText" style="font-size:9px; margin-right:10px;">LOADING...</span>
+            <input type="checkbox" id="musicEnabled" onchange="saveMusic()" style="width:auto; margin:0;">
+        </label>
+    </div>
+    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:15px;">
+        <input type="text" id="musicVidId" placeholder="YOUTUBE ID" style="margin-bottom:0;">
+        <input type="number" id="musicStart" placeholder="SEC" style="margin-bottom:0;">
+        <button class="btn-save" onclick="saveMusic()">UPDATE</button>
+    </div>
+</div>
     </script>
 </body>
 </html>
